@@ -1,0 +1,42 @@
+# Fragment folder
+input_frag_dir: "data/frags"
+input_barcode_dir: "data/barcodes"
+out_dir: "output"
+genome_dir: "/oak/stanford/groups/akundaje/leixiong/genome"
+
+frag_suffix: ".tsv.gz"
+barcode_suffix: ".txt"
+peak_suffix: "_peaks_overlap_filtered.narrowPeak"
+
+sample_fragments: "1_sample_fragments"
+celltype_fragments: "2_celltype_fragments"
+output:
+  sample_fragments: 
+    fragments: "fragments"
+    pseudorep1: "pseudorep1"
+    pseudorep2: "pseudorep2"
+    pseudorepT: "pseudorepT"
+  celltype_fragments: 
+    fragments: "fragments"
+    pseudorep1: "pseudorep1"
+    pseudorep2: "pseudorep2"
+    pseudorepT: "pseudorepT"
+  peaks: "3_peaks"
+  bigwig: "4_bigwig"
+  union_peak: "5_union_peak"
+
+
+genome_build: hg38
+genome:
+  hg38:
+    fasta: "hg38.fa"
+    chrom_sizes: "hg38.chrom.sizes"
+    blacklist: "blacklist.bed.gz"
+    bias_model: "bias.h5"
+    chr_fold: "splits"
+  mm10:
+    fasta: "mm10.fa"
+    chrom_sizes: "mm10.chrom.sizes"
+    blacklist: "mm10.blacklist2.bed"
+    bias_model: "bias.h5"
+    chr_fold: "splits"

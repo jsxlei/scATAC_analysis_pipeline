@@ -1,0 +1,159 @@
+import os
+
+configfile: "config.yaml"
+
+# include: "rules/fragments.smk"
+# include: "rules/peaks.smk"
+
+def list_celltypes():
+    celltypes = []
+    for fname in os.listdir(config["input_barcode_dir"]):
+        if fname.endswith(config["barcode_suffix"]):
+            name = fname.replace(config["barcode_suffix"], "").split('-')[1]
+            if name not in celltypes:
+                celltypes.append(name)
+    # return ['0_pre'] #['1_unstim', '2_m2', '5_m2']
+    return celltypes
+
+def list_samples():
+    return [i.replace(config["frag_suffix"], "") for i in os.listdir(config['input_frag_dir']) if i.endswith(config["frag_suffix"])]
+
+def list_subfolders():
+    return ["fragments", "pseudorep1", "pseudorep2", "pseudorepT"]
+
+def list_input_fragment_files(wildcards):
+    return expand("{input_frag_dir}/{sample}{frag_suffix}", input_frag_dir=config["input_frag_dir"], frag_suffix=config['frag_suffix'].replace('.gz', ''), sample=list_samples())
+
+def list_barcode_files(wildcards):
+    return expand("{input_barcode_dir}/{sample}-{cell_type}.txt", 
+            input_barcode_dir=config["input_barcode_dir"],
+            sample=list_samples(), cell_type=list_celltypes())
+
+def list_sample_fragment_files(wildcards):
+    output = expand("{sample_frag_dir}/{subfolder}/{cell_type}-{sample}.tsv", 
+            sample_frag_dir="{out_dir}/{sample_fragments}".format(out_dir=config["out_dir"], sample_fragments=config["sample_fragments"]),
+            subfolder='fragments', #list_subfolders(),
+            sample=list_samples(), cell_type=list_celltypes())
+    # print(output)
+    return output
+
+def list_celltype_fragment_files(wildcards):
+    output = expand("{celltype_frag_dir}/{subfolder}/{cell_type}_sorted.tsv",
+            celltype_frag_dir="{out_dir}/{celltype_fragments}".format(out_dir=config["out_dir"], celltype_fragments=config["celltype_fragments"]),
+            subfolder="fragments", #list_subfolders(),
+            cell_type=list_celltypes())
+    # print(output)
+    return output
+
+def list_peak_files(wildcards):
+    output = expand("{peak_dir}/{cell_type}_peaks_overlap_filtered.narrowPeak",
+                  peak_dir=config["out_dir"] + "/" + config["output"]["peaks"],
+                  cell_type=list_celltypes(),
+                  peak_suffix=config["peak_suffix"])
+    return output
+
+def list_bigwig_files(wildcards):
+    output = expand("{bigwig_dir}/{cell_type}_unstranded.bw",
+                  bigwig_dir=config["out_dir"] + "/" + config["output"]["bigwig"],
+                  cell_type=list_celltypes())
+    # print(output)
+    return output
+
+
+rule all:
+    input:
+        # list_peak_files
+        # list_input_fragment_files
+        # list_sample_fragment_files
+        # list_celltype_fragment_files
+        # list_peak_files
+        list_bigwig_files, list_peak_files
+
+
+rule zcat:
+    input:
+        lambda wildcards: expand("{input_frag_dir}/{sample}.tsv.gz", input_frag_dir=config["input_frag_dir"], sample=wildcards.sample)
+    params:
+        input_frag_dir = config["input_frag_dir"],
+        suffix = config["frag_suffix"].replace('.gz', '')
+    output:
+        "{input_frag_dir}/{sample}{suffix}"
+    shell:
+        """
+        echo {input} {output}
+        zcat {param.input_frag_dir}/{input} | grep -v '^#' | sed 's/-1\t/\t/g' > {output}
+        """
+
+rule sample_fragments:
+    input:
+        list_barcode_files
+    params:
+        input_barcode_dir = config["input_barcode_dir"],
+        input_file = "{sample}-{cell_type}.txt",
+        input_frag_dir = config["input_frag_dir"],
+        sample_frag_dir = "{out_dir}/{sample_fragments}".format(out_dir=config["out_dir"], sample_fragments=config["sample_fragments"]),
+    output:
+        "{sample_frag_dir}/fragments/{cell_type}-{sample}.tsv", 
+    threads: 8
+    shell:
+        """
+        scripts/process_frags.bin {params.input_file} {params.input_barcode_dir}/ {params.input_frag_dir}/ {params.sample_frag_dir}/
+        """
+
+rule sort_cat:
+    input:
+        list_sample_fragment_files
+    output:
+        "{celltype_frag_dir}/fragments/{cell_type}_sorted.tsv"
+    params:
+        celltype_frag_dir = "{out_dir}/{celltype_fragments}".format(out_dir=config["out_dir"], celltype_fragments=config["celltype_fragments"]),
+        sample_frag_dir = "{out_dir}/{sample_fragments}".format(out_dir=config["out_dir"], sample_fragments=config["sample_fragments"])
+    threads: 8
+    shell:
+        """
+        bash scripts/sort_cat.sh {wildcards.cell_type} {params.sample_frag_dir} {params.celltype_frag_dir}
+        """
+
+rule callpeak:
+    input:
+        list_celltype_fragment_files
+    params:
+        celltype_frag_dir = "{out_dir}/{celltype_fragments}".format(out_dir=config["out_dir"], celltype_fragments=config["celltype_fragments"]),
+        peak_dir = "{out_dir}/{peak_dir}".format(out_dir=config["out_dir"], peak_dir=config["output"]["peaks"]),
+        peak_suffix = config["peak_suffix"],
+        chrom_size = "{genome_dir}/{genome_build}/{chrom_size}".format(
+            genome_dir=config["genome_dir"], genome_build=config["genome_build"], chrom_size=config["genome"][config["genome_build"]]["chrom_sizes"]),
+        blacklist = "{genome_dir}/{genome_build}/{blacklist}".format(
+            genome_dir=config["genome_dir"], genome_build=config["genome_build"], blacklist=config["genome"][config["genome_build"]]["blacklist"])
+    output:
+        "{peak_dir}/{cell_type}_peaks_overlap_filtered.narrowPeak"  # . should never within wildcards
+    conda:
+        "envs/callpeak.yaml"
+    shell:
+        """
+        bash scripts/call_peaks.sh {wildcards.cell_type} {params.celltype_frag_dir} {params.peak_dir} {params.chrom_size} {params.blacklist}
+        """
+
+rule make_bigwig:
+    input:
+        list_celltype_fragment_files
+    params:
+        bigwig_dir = "{out_dir}/{bigwig_dir}".format(out_dir=config["out_dir"], bigwig_dir=config["output"]["bigwig"]),
+        fasta_file = "{genome_dir}/{genome_build}/{fasta}".format(genome_dir=config["genome_dir"], genome_build=config["genome_build"], fasta=config["genome"][config["genome_build"]]["fasta"]),
+        celltype_frag_dir = "{out_dir}/{celltype_fragments}".format(out_dir=config["out_dir"], celltype_fragments=config["celltype_fragments"]),
+        chrom_size = "{genome_dir}/{genome_build}/{chrom_size}".format(
+            genome_dir=config["genome_dir"], genome_build=config["genome_build"], chrom_size=config["genome"][config["genome_build"]]["chrom_sizes"]),
+        output = "{bigwig_dir}/{cell_type}"
+    output:
+        "{bigwig_dir}/{cell_type}_unstranded.bw"
+    conda:
+        "chrombpnet"
+    shell:
+        """
+        python scripts/reads_to_bigwig.py \
+            -g {params.fasta_file} \
+            -ifrag {params.celltype_frag_dir}/fragments/{wildcards.cell_type}_sorted.tsv \
+            -c {params.chrom_size} \
+            -o {params.output} \
+            -d ATAC
+        """

@@ -1,0 +1,30 @@
+# from snakemake.utils import min_version
+# min_version("5.4")
+
+configfile: "config.yaml"
+
+
+include: "rules/negatives.smk"
+
+import os
+# genome_config = {i: os.path.join(config['genome_dir'], config["genome"][i]) for i in config["genome"]}
+output_config = {i: os.path.join(config['out_dir'], config["out"][i]) for i in config["out"]}
+
+def list_output_files(wildcards):    
+    CELLTYPES = []
+    
+    for fname in os.listdir(config["peak_dir"]):
+        if fname.endswith(config["peak_suffix"]):
+            CELLTYPES.append(fname.replace(config["peak_suffix"],""))
+
+    return expand("{negative_dir}/{{cell_type}}/{fold}_negatives.bed".format(
+                negative_dir=output_config["negative_dir"],
+                fold=config["fold"]), 
+                cell_type=CELLTYPES
+            )
+
+rule all:
+    input: list_output_files
+
+
+

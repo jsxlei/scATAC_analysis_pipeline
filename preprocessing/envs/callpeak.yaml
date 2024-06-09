@@ -1,0 +1,9 @@
+name: callpeak
+channels:
+  - bioconda
+  - conda-forge
+
+dependencies:
+  - bioconda::ucsc-bedgraphtobigwig
+  - bioconda::macs2
+  - bioconda::bedtools

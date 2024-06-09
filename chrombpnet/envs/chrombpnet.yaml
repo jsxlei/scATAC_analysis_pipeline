@@ -1,0 +1,12 @@
+name: chrombpnet
+channels:
+  - bioconda
+  - conda-forge
+
+dependencies:
+  - chrombpnet
+  - samtools 
+  - bedtools 
+  - ucsc-bedgraphtobigwig 
+  - pybigwig 
+  - meme

@@ -1,0 +1,52 @@
+# Configuration for paths and parameters
+
+# Directory paths
+barcode_dir: none
+peak_dir: "/oak/stanford/groups/akundaje/leixiong/projects/imac_igvf/2_chrombpnet/1_inputs/3_peaks"
+peak_suffix: "_peaks_overlap_filtered.narrowPeak"  # Peak file suffix
+union_peak: "/oak/stanford/groups/akundaje/leixiong/projects/imac_igvf/2_chrombpnet/1_inputs/5_merged_peaks/union_peaks.narrowPeak"
+
+fragment_dir: none
+bam: none
+
+genome_build: hg38
+genome_dir: "/oak/stanford/groups/akundaje/leixiong/genome"
+genome:
+  hg38:
+    fasta: "hg38.fa"
+    chrom_sizes: "hg38.chrom.sizes"
+    blacklist: "blacklist.bed.gz"
+    bias_model: "bias.h5"
+    chr_fold: "splits"
+  mm10:
+    fasta: "mm10.fa"
+    chrom_sizes: "mm10.chrom.sizes"
+    blacklist: "mm10.blacklist2.bed"
+    bias_model: "bias.h5"
+    chr_fold: "splits"
+
+fold: 'fold_0'
+
+# Additional configuration files
+motif_to_pwm: "motif_to_pwm.tsv"
+
+# Output directories
+out_dir: "/oak/stanford/groups/akundaje/leixiong/projects/imac_igvf/2_chrombpnet"
+out:
+  model_dir: "models"
+  negative_dir: "negatives"
+  modisco_dir: "modisco"
+  shap_dir: "shap"
+  hitcaller_dir: "hitcaller"
+
+tmpdir: "/tmp"
+
+# Fragment folder
+input_dir: "/oak/stanford/groups/akundaje/leixiong/projects/imac_igvf/2_chrombpnet/1_inputs/2_fragments"
+input:
+  sample_fragments: 
+    temp: "temp"
+    fragments: "fragments"
+    pseudorep1: "pseudorep1"
+    pseudorep2: "pseudorep2"
+    pseudorepT: "pseudorepT"
