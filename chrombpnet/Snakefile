@@ -10,7 +10,7 @@ import os
 # genome_config = {i: os.path.join(config['genome_dir'], config["genome"][i]) for i in config["genome"]}
 output_config = {i: os.path.join(config['out_dir'], config["out"][i]) for i in config["out"]}
 
-def list_output_files(wildcards):    
+def list_negatives(wildcards):    
     CELLTYPES = []
     
     for fname in os.listdir(config["peak_dir"]):
@@ -23,8 +23,91 @@ def list_output_files(wildcards):
                 cell_type=CELLTYPES
             )
 
+def list_models(wildcards):
+    return expand("{model_dir}/chrombpnet_nobias.h5".format(model_dir=output_config["model_dir"]))
+
+
 rule all:
-    input: list_output_files
+    input: list_negatives
 
 
+rule train:
+    input:
+        ifrags = config["input_frag_dir"] + "/{sample}{frag_suffix}".format(sample=config["sample"], frag_suffix=config["frag_suffix"]),
+        peaks = config["peak_dir"] + "/{cell_type}{peak_suffix}".format(cell_type=config["cell_type"], peak_suffix=config["peak_suffix"]),
+        negatives = config["negative_dir"] + "/{cell_type}/{fold}_negatives.bed".format(cell_type=config["cell_type"], fold=config["fold"]),
+        bias_model = output_config["model_dir"] + "/bias.h5"
+    output:
+        "{out_dir}/models/chrombpnet_nobias.h5"
+    params:
+        out_dir = output_config["model_dir"],
+        bias_model = output_config["model_dir"] + "/bias.h5",
+        frags = config["input_frag_dir"] + "/{sample}{frag_suffix}".format(sample=config["sample"], frag_suffix=config["frag_suffix"]),
+        peaks = config["peak_dir"] + "/{cell_type}{peak_suffix}".format(cell_type=config["cell_type"], peak_suffix=config["peak_suffix"]),
+        negatives = config["negative_dir"] + "/{cell_type}/{fold}_negatives.bed".format(cell_type=config["cell_type"], fold=config["fold"]),
+        GENOME = config["genome"],
+        CHROM_SIZES = config["chrom_sizes"],
+        CHR_FOLD_PATH = config["chr_fold_path"]
+    shell:
+        """
+        if [[ -f {out_dir}/models/chrombpnet_nobias.h5 ]]; then
+            echo "Found model"
+        else
+            if [[ -d $out_dir ]]; then
+                echo "Found logdir. Deleting previous model"
+                rm -rf $out_dir
+            fi
 
+            echo "Training model"
+            chrombpnet pipeline \
+                -ifrag {input.ifrags} \
+                -p {input.peaks} \
+                -n {input.negatives} \
+                -b {input.bias_model} \
+                -o {params.out_dir} \
+                -d "ATAC" \
+                -g {params.GENOME} \
+                -c {params.CHROM_SIZES} \
+                -fl {params.CHR_FOLD_PATH}
+        fi
+        """
+
+# rule modisco:
+#     input:
+#     output:
+#     params:
+#     shell:
+#         """
+#         modisco motifs \
+#             -i H5PY \
+#             -n MAX_SEQLETS \
+#             -op OUTPUT_PREFIX \
+#             #[-l N_LEIDEN] [-w WINDOW] [-v]
+
+#         """
+
+# rule hitcaller:
+#     input:
+#     output:
+#     params:
+#     shell:
+#         """
+#         hitcaller \
+#             -i H5PY \
+#             -o OUTPUT_PREFIX \
+#             #[-l N_LEIDEN] [-w WINDOW] [-v]
+
+#         """
+
+# rule footprints:
+#     input:
+#     output:
+#     params:
+#     shell:
+#         """
+#         footprints \
+#             -i H5PY \
+#             -o OUTPUT_PREFIX \
+#             #[-l N_LEIDEN] [-w WINDOW] [-v]
+
+#         """

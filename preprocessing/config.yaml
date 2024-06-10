@@ -1,7 +1,7 @@
 # Fragment folder
-input_frag_dir: "data/frags"
-input_barcode_dir: "data/barcodes"
-out_dir: "output"
+input_frag_dir: "/users/leixiong/projects/imac_igvf/data/frags"
+input_barcode_dir: "/users/leixiong/projects/imac_igvf/2_chrombpnet/0_barcode/cell_type0"
+out_dir: "/users/leixiong/oak/tmp/preprocessing"
 genome_dir: "/oak/stanford/groups/akundaje/leixiong/genome"
 
 frag_suffix: ".tsv.gz"
@@ -40,3 +40,7 @@ genome:
     blacklist: "mm10.blacklist2.bed"
     bias_model: "bias.h5"
     chr_fold: "splits"
+
+celltypes:
+  - "0_pre"
+  - "2_m2"

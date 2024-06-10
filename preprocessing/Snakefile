@@ -6,16 +6,22 @@ configfile: "config.yaml"
 # include: "rules/peaks.smk"
 
 def list_celltypes():
+    if "celltypes" in config and len(config["celltypes"]) > 0:
+        return config["celltypes"]
+
     celltypes = []
     for fname in os.listdir(config["input_barcode_dir"]):
         if fname.endswith(config["barcode_suffix"]):
             name = fname.replace(config["barcode_suffix"], "").split('-')[1]
             if name not in celltypes:
                 celltypes.append(name)
-    # return ['0_pre'] #['1_unstim', '2_m2', '5_m2']
+    
     return celltypes
 
 def list_samples():
+    if "samples" in config and len(config["samples"]) > 0:
+        return config["samples"]
+
     return [i.replace(config["frag_suffix"], "") for i in os.listdir(config['input_frag_dir']) if i.endswith(config["frag_suffix"])]
 
 def list_subfolders():
@@ -59,15 +65,20 @@ def list_bigwig_files(wildcards):
     # print(output)
     return output
 
+def list_union_peak_files(wildcards):
+    output = expand("{union_peak_dir}/union_peaks.narrowPeak",
+                  union_peak_dir=config["out_dir"] + "/" + config["output"]["union_peak"])
+    return output
+# union_peaks =labmda wildcards: expand("{out_dir}/{union_peak_dir}/union_peaks.narrowPeak", out_dir=config["out_dir"], union_peak_dir=config["output"]["union_peak"])
 
 rule all:
     input:
-        # list_peak_files
         # list_input_fragment_files
         # list_sample_fragment_files
         # list_celltype_fragment_files
-        # list_peak_files
-        list_bigwig_files, list_peak_files
+        list_peak_files,
+        list_bigwig_files, 
+        list_union_peak_files
 
 
 rule zcat:
@@ -97,6 +108,9 @@ rule sample_fragments:
     threads: 8
     shell:
         """
+        mkdir -p {params.sample_frag_dir}/pseudorep1
+        mkdir -p {params.sample_frag_dir}/pseudorep2
+        mkdir -p {params.sample_frag_dir}/pseudorepT
         scripts/process_frags.bin {params.input_file} {params.input_barcode_dir}/ {params.input_frag_dir}/ {params.sample_frag_dir}/
         """
 
@@ -111,6 +125,9 @@ rule sort_cat:
     threads: 8
     shell:
         """
+        mkdir -p {params.celltype_frag_dir}/pseudorep1
+        mkdir -p {params.celltype_frag_dir}/pseudorep2
+        mkdir -p {params.celltype_frag_dir}/pseudorepT
         bash scripts/sort_cat.sh {wildcards.cell_type} {params.sample_frag_dir} {params.celltype_frag_dir}
         """
 
@@ -157,3 +174,18 @@ rule make_bigwig:
             -o {params.output} \
             -d ATAC
         """
+
+rule make_union_peak:
+    input:
+        list_peak_files
+    params:
+        peak_dir = "{out_dir}/{peak_dir}".format(out_dir=config["out_dir"], peak_dir=config["output"]["peaks"]),
+        out_dir = config["out_dir"],
+        union_peak_dir = config["output"]["union_peak"]
+    output:
+        "{out_dir}/{union_peak_dir}/union_peaks.narrowPeak"
+    shell:
+        """
+        python scripts/make_consensus_peakset.py --peaks_dir {params.peak_dir} --output {output}
+        """
+    # cat {input} | sort -k1,1 -k2,2n | bedtools merge -i stdin > {output}
