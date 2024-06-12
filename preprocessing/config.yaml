@@ -42,5 +42,3 @@ genome:
     chr_fold: "splits"
 
 celltypes:
-  - "0_pre"
-  - "2_m2"
