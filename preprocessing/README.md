@@ -1,7 +1,7 @@
 # Preprocess ATAC fragment for Chrombpnet snakemake pipeline
+This is a snakemake pipeline. 
 
-
-
+![](overview_diagram.png)
 # Before Start
 ## Installation
 create chrombpnet enviroment following https://github.com/kundajelab/chrombpnet
@@ -66,4 +66,5 @@ out_dir
 
 
 # Acknowledgements
-Thanks Salil for contributing the original preprocessing code 
+Thanks Salil and Ryan for contributing the original preprocessing code.    
+Please refer to https://github.com/kundajelab/scAnnot-to-chrombpnet for more details!

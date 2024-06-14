@@ -145,7 +145,7 @@ rule callpeak:
     output:
         "{peak_dir}/{cell_type}_peaks_overlap_filtered.narrowPeak"  # . should never within wildcards
     conda:
-        "envs/callpeak.yaml"
+        "chrombpnet"
     shell:
         """
         bash scripts/call_peaks.sh {wildcards.cell_type} {params.celltype_frag_dir} {params.peak_dir} {params.chrom_size} {params.blacklist}
