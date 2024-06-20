@@ -1,18 +1,27 @@
 # Configuration for paths and parameters
 
 # Directory paths
+# Peak dir: peak_dir/{cell_type}{peak_suffix}, union_peak is a merged peak file over all peak files
 peak_dir: "/oak/stanford/groups/akundaje/leixiong/projects/mac_crzhang/J774_time_course_atac_crzhang/peaks"
 peak_suffix: "_peaks.narrowPeak" #"_peaks_overlap_filtered.narrowPeak"  # Peak file suffix
 union_peak: "/oak/stanford/groups/akundaje/leixiong/projects/mac_crzhang/J774_time_course_atac_crzhang/merged_peaks/union_peaks.narrowPeak"
-out_dir: "test" #"/oak/stanford/groups/akundaje/leixiong/projects/imac_igvf/2_chrombpnet"
-input_dir: "/oak/stanford/groups/akundaje/leixiong/projects/mac_crzhang/J774_time_course_atac_crzhang/bams/deduped"
 
+# Input files either fragments or bam files:
+# Fragment dir: input_dir/{cell_type}{input_suffix}
+input_dir: "/oak/stanford/groups/akundaje/leixiong/projects/mac_crzhang/J774_time_course_atac_crzhang/bams/deduped"
 input_suffix: ".noMT.filtered.deduped.bam"  # Input file suffix
 format: "bam"
 
+# Genome and motif directories
+genome_dir: "/oak/stanford/groups/akundaje/leixiong/genome"
+motif_dir: "/oak/stanford/groups/akundaje/leixiong/genome/motifs"
+
+out_dir: "/oak/stanford/groups/akundaje/leixiong/projects/mac_zhang/output"
+
+
+## Please DO NOT change the following configurations
 # Genome configuration include bias for running chrombpnet
 genome_build: hg38
-genome_dir: "/oak/stanford/groups/akundaje/leixiong/genome"
 genome:
   hg38:
     fasta: "hg38.fa"
@@ -30,7 +39,6 @@ genome:
 fold: 'fold_0'
 
 # Modisco configuration files
-motif_dir: "/oak/stanford/groups/akundaje/leixiong/genome/motifs"
 motif:
   motif_to_pwm: "motif_to_pwm.tsv"
   meme_db: "motifs.meme.txt"
@@ -53,13 +61,3 @@ out:
 head: ['counts', 'profile']
 
 tmpdir: "/tmp"
-
-# Fragment folder
-# input_dir: "/oak/stanford/groups/akundaje/leixiong/projects/imac_igvf/2_chrombpnet/1_inputs/2_fragments"
-# input:
-#   sample_fragments: 
-#     temp: "temp"
-#     fragments: "fragments"
-#     pseudorep1: "pseudorep1"
-#     pseudorep2: "pseudorep2"
-#     pseudorepT: "pseudorepT"

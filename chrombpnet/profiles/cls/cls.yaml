@@ -1,0 +1,53 @@
+__default__:
+  jobname: "{rule}"
+  output: ".slurm/{rule}.out"
+  error: ".slurm/{rule}.err"
+  partition: akundaje
+  n_node: 1
+  n_task: 1
+  n_cpu: "{threads}"
+
+train:
+  partition: akundaje,gpu
+  time: "2-0"
+  gres: "--gres=gpu:1"
+  cpus-per-task: "4"
+
+
+deepshap:
+  partition: akundaje,owners,gpu
+  time: "2-0"
+  gres: "--gres=gpu:1"
+  cpus-per-task: "1"
+  mem: "100G"
+
+average_shap:
+  partition: akundaje,owners,sfgf
+  time: "2-0"
+  cpus-per-task: "1"
+  mem: "30G"
+
+modisco:
+  partition: akundaje,owners,gpu
+  gres: "--gres=gpu:1"
+  time: "2-0"
+  cpus-per-task: "1"
+  mem: "50G"
+
+generate_prediction:
+  partition: akundaje,owners,wjg,sfgf
+  time: "2-0"
+  cpus-per-task: "4"
+  mem: "30G"
+
+make_contrib_bw:
+  partition: akundaje,owners,wjg,sfgf
+  time: "2-0"
+  cpus-per-task: "4"
+  mem: "30G"
+
+hitcaller:
+  partition: akundaje,owners,gpu,biochem,sfgf
+  time: "4-0"
+  cpus-per-task: "4"
+  mem: "40G"

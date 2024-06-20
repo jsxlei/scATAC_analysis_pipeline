@@ -27,7 +27,7 @@ FOLDS=config['fold']
 #     return expand(output_config['negative_dir']+"/{fold}_negatives.bed", fold=FOLDS)
 
 def list_models(wildcards):
-    return expand(config["out_dir"]+"/{cell_type}/{fold}/models/chrombpnet_nobias.h5", cell_type=CELLTYPES, fold=config['fold'])
+    return expand(output_config["model_dir"]+"/{cell_type}/{fold}/models/chrombpnet_nobias.h5", cell_type=CELLTYPES, fold=config['fold'])
 
 def list_shap(wildcards):
     return expand(output_config["shap_dir"] + "/{cell_type}/{fold}.{head}_scores.bw", cell_type=CELLTYPES, fold=config['fold'], head=config['head'])
@@ -110,7 +110,7 @@ rule train:
         negatives = output_config["negative_dir"] + "/{fold}_negatives.bed", 
         bias_model = genome_config["bias_model"],
     output:
-        "{out_dir}/{cell_type}/{fold}/models/chrombpnet_nobias.h5"
+        "{model_dir}/{cell_type}/{fold}/models/chrombpnet_nobias.h5"
     params:
         model_dir = output_config["model_dir"],
         out_dir = output_config['model_dir'] + "/{cell_type}/{fold}",
@@ -121,6 +121,7 @@ rule train:
     resources:
         nvidia_gpu=1,
         mem_gb=30
+    threads: 1
     conda:
         "chrombpnet"
     shell:
@@ -128,9 +129,9 @@ rule train:
         if [[ -f {output} ]]; then
             echo "Found model"
         else
-            if [[ -d {params.model_dir} ]]; then
+            if [[ -d {params.out_dir} ]]; then
                 echo "Found logdir. Deleting previous model"
-                rm -rf {params.model_dir}
+                rm -rf {params.out_dir}
             fi
 
             echo "Training model"
@@ -139,7 +140,7 @@ rule train:
                 -p {input.peaks} \
                 -n {input.negatives} \
                 -b {input.bias_model} \
-                -o {params.model_dir} \
+                -o {params.out_dir} \
                 -g {params.fasta} \
                 -c {params.chrom_sizes} \
                 -fl {params.chr_fold}/{wildcards.fold}.json \
@@ -159,10 +160,16 @@ rule deepshap:
     params:
         fasta = genome_config["fasta"],
         chrom_sizes = genome_config["chrom_sizes"],
-        output_prefix = output_config["shap_dir"] + "/{cell_type}/{fold}"
+        output_prefix = output_config["shap_dir"] + "/{cell_type}/{fold}",
+        shap_dir = output_config["shap_dir"]
+    resources:
+        nvidia_gpu=1,
+        mem_gb=100
+    conda:
+        "chrombpnet"
     shell:
         """
-        mkdir -p $shap_dir
+        mkdir -p {params.shap_dir}
         if [[ -f {output.profile_shap} ]]; then
             echo "Found shap scores"
         else
@@ -172,7 +179,8 @@ rule deepshap:
                 -r {input.union_peak} \
                 -g {params.fasta} \
                 -c {params.chrom_sizes} \
-                -op {params.output_prefix}
+                -op {params.output_prefix} \
+                -d "chr1"
         fi
         """
 
@@ -184,6 +192,8 @@ rule average_shap:
     params:
         folds = config['fold'],
         base_dir = output_config['shap_dir'] + "/{cell_type}"
+    conda:
+        "chrombpnet"
     shell:
         """
         python scripts/average_shap.py \
@@ -208,6 +218,8 @@ rule modisco:
         report_outdir=output_config["modisco_dir"] + "/{cell_type}/motiisco/{head}",
         img_suffix_dir="./",
     threads: 4
+    conda:
+        "chrombpnet"
     shell:
         """
         modisco motifs -i {input} -n {params.max_seqlets} -l {params.num_leiden} -o {output.modisco_output}
