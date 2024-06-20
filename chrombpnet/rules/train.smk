@@ -3,6 +3,7 @@
 rule train:
     input:
     output:
+        ""
     params:
     shell:
         """

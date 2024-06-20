@@ -1,14 +1,16 @@
 # Configuration for paths and parameters
 
 # Directory paths
-barcode_dir: none
-peak_dir: "/oak/stanford/groups/akundaje/leixiong/projects/imac_igvf/2_chrombpnet/1_inputs/3_peaks"
-peak_suffix: "_peaks_overlap_filtered.narrowPeak"  # Peak file suffix
-union_peak: "/oak/stanford/groups/akundaje/leixiong/projects/imac_igvf/2_chrombpnet/1_inputs/5_merged_peaks/union_peaks.narrowPeak"
+peak_dir: "/oak/stanford/groups/akundaje/leixiong/projects/mac_crzhang/J774_time_course_atac_crzhang/peaks"
+peak_suffix: "_peaks.narrowPeak" #"_peaks_overlap_filtered.narrowPeak"  # Peak file suffix
+union_peak: "/oak/stanford/groups/akundaje/leixiong/projects/mac_crzhang/J774_time_course_atac_crzhang/merged_peaks/union_peaks.narrowPeak"
+out_dir: "test" #"/oak/stanford/groups/akundaje/leixiong/projects/imac_igvf/2_chrombpnet"
+input_dir: "/oak/stanford/groups/akundaje/leixiong/projects/mac_crzhang/J774_time_course_atac_crzhang/bams/deduped"
 
-fragment_dir: none
-bam: none
+input_suffix: ".noMT.filtered.deduped.bam"  # Input file suffix
+format: "bam"
 
+# Genome configuration include bias for running chrombpnet
 genome_build: hg38
 genome_dir: "/oak/stanford/groups/akundaje/leixiong/genome"
 genome:
@@ -21,17 +23,26 @@ genome:
   mm10:
     fasta: "mm10.fa"
     chrom_sizes: "mm10.chrom.sizes"
-    blacklist: "mm10.blacklist2.bed"
+    blacklist: "mm10-blacklist.v2.bed.gz"
     bias_model: "bias.h5"
     chr_fold: "splits"
 
 fold: 'fold_0'
 
-# Additional configuration files
-motif_to_pwm: "motif_to_pwm.tsv"
+# Modisco configuration files
+motif_dir: "/oak/stanford/groups/akundaje/leixiong/genome/motifs"
+motif:
+  motif_to_pwm: "motif_to_pwm.tsv"
+  meme_db: "motifs.meme.txt"
 
-# Output directories
-out_dir: "/oak/stanford/groups/akundaje/leixiong/projects/imac_igvf/2_chrombpnet"
+
+modisco:
+  max_seqlets: 1000000
+  num_leiden: 2
+  num_matches: 10
+
+
+# Chrombpnet output directories
 out:
   model_dir: "models"
   negative_dir: "negatives"
@@ -39,14 +50,16 @@ out:
   shap_dir: "shap"
   hitcaller_dir: "hitcaller"
 
+head: ['counts', 'profile']
+
 tmpdir: "/tmp"
 
 # Fragment folder
-input_dir: "/oak/stanford/groups/akundaje/leixiong/projects/imac_igvf/2_chrombpnet/1_inputs/2_fragments"
-input:
-  sample_fragments: 
-    temp: "temp"
-    fragments: "fragments"
-    pseudorep1: "pseudorep1"
-    pseudorep2: "pseudorep2"
-    pseudorepT: "pseudorepT"
+# input_dir: "/oak/stanford/groups/akundaje/leixiong/projects/imac_igvf/2_chrombpnet/1_inputs/2_fragments"
+# input:
+#   sample_fragments: 
+#     temp: "temp"
+#     fragments: "fragments"
+#     pseudorep1: "pseudorep1"
+#     pseudorep2: "pseudorep2"
+#     pseudorepT: "pseudorepT"

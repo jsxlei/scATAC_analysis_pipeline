@@ -24,15 +24,13 @@ rule negatives:
                 fold=config["fold"]
             )
     output:
-        "{out_dir}/{negative_dir}/{cell_type}/{fold}_negatives.bed".format(
+        "{out_dir}/{negative_dir}/{fold}_negatives.bed".format(
             out_dir=config["out_dir"],
             negative_dir=config["out"]["negative_dir"],
-            cell_type="{cell_type}",
             fold=config["fold"]
         )
     conda:
         "chrombpnet"
-        #"../envs/chrombpnet.yaml"
 
     shell:
         """
