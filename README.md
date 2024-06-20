@@ -3,7 +3,7 @@
 ## Requirements
 ### install snakemake
 ```
-conda install -c bioconda snakemake
+conda install -c bioconda snakemake=7
 ```
 
 ## Start

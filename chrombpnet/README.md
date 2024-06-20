@@ -11,7 +11,7 @@
 
 ## Prerequirements
 1. Enviroments
-    - snakemake
+    - snakemake (version=7*)
     - chrombpnet
     - finemo_gpu
     

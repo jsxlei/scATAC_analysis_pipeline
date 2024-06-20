@@ -7,6 +7,12 @@ __default__:
   n_task: 1
   n_cpu: "{threads}"
 
+negative:
+  partition: akundaje,owners,sfgf,biochem
+  time: "2-0"
+  cpus-per-task: "4"
+  mem: "30G"
+
 train:
   partition: akundaje,gpu
   time: "2-0"
