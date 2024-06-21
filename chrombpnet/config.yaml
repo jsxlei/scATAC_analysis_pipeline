@@ -36,7 +36,7 @@ genome:
     bias_model: "bias.h5"
     chr_fold: "splits"
 
-fold: ['fold_0', 'fold_1', 'fold_2', 'fold_3', 'fold_4']
+fold: ['fold_0'] #, 'fold_1', 'fold_2', 'fold_3', 'fold_4']
 
 # Modisco configuration files
 motif:

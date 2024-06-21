@@ -17,7 +17,7 @@ CELLTYPES = [
         fname.replace(config["peak_suffix"], "")
         for fname in os.listdir(config["peak_dir"])
         if fname.endswith(config["peak_suffix"])
-    ]
+    ][:1]
 
 FOLDS=config['fold']
 
@@ -119,8 +119,9 @@ rule train:
         chr_fold = genome_config["chr_fold"],
         format = config['format']
     resources:
-        nvidia_gpu=1,
-        mem_gb=30
+        gpu=1,
+        mem_mb=60000, 
+        disk_mb=30720 
     threads: 1
     conda:
         "chrombpnet"
@@ -164,7 +165,7 @@ rule deepshap:
         shap_dir = output_config["shap_dir"]
     resources:
         nvidia_gpu=1,
-        mem_gb=100
+        mem_mb=100000
     conda:
         "chrombpnet"
     shell:

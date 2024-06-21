@@ -15,11 +15,11 @@ negative:
   mem: "30G"
 
 train:
-  partition: akundaje,gpu
+  partition: akundaje
   time: "2-0"
   gres: "--gres=gpu:1"
-  cpus-per-task: "4"
-
+  cpus-per-task: "1"
+  mem: "60G"
 
 deepshap:
   partition: akundaje,owners,gpu
