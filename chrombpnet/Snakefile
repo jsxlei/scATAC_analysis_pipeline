@@ -17,7 +17,7 @@ CELLTYPES = [
         fname.replace(config["peak_suffix"], "")
         for fname in os.listdir(config["peak_dir"])
         if fname.endswith(config["peak_suffix"])
-    ][:1]
+    ]
 
 FOLDS=config['fold']
 

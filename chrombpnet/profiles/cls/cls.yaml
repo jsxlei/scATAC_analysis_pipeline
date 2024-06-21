@@ -15,7 +15,7 @@ negative:
   mem: "30G"
 
 train:
-  partition: akundaje
+  partition: akundaje,owners,gpu
   time: "2-0"
   gres: "--gres=gpu:1"
   cpus-per-task: "1"
