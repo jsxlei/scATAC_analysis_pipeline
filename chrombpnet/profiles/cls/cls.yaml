@@ -1,12 +1,14 @@
 __default__:
   jobname: "{rule}"
-  output: ".slurm/{rule}.out"
-  error: ".slurm/{rule}.err"
+  output: ".slurm/{rule}/{wildcards.cell_type}.out"
+  error: ".slurm/{rule}/{wildcards.cell_type}.err"
   partition: akundaje
   gres: ""
+  time: "5-00:00:00"
   n_node: 1
   n_task: 1
   n_cpu: "{threads}"
+  qos: "long"
 
 negative:
   partition: akundaje,owners,sfgf,biochem
@@ -54,7 +56,8 @@ make_contrib_bw:
   mem: "30G"
 
 hitcaller:
-  partition: akundaje,owners,gpu,biochem,sfgf
+  partition: akundaje,owners,gpu
   time: "4-0"
   cpus-per-task: "4"
+  gres: "--gres=gpu:1"
   mem: "40G"

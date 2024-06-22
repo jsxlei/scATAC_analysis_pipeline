@@ -2,9 +2,46 @@
 
 rule train:
     input:
+        input_file = config["input_dir"] + "/{cell_type}" + config['input_suffix'], 
+        peaks = config['union_peak'], 
+        negatives = output_config["negative_dir"] + "/{fold}_negatives.bed", 
+        bias_model = genome_config["bias_model"],
     output:
-        ""
+        "{model_dir}/{cell_type}/{fold}/models/chrombpnet_nobias.h5"
     params:
+        model_dir = output_config["model_dir"],
+        out_dir = output_config['model_dir'] + "/{cell_type}/{fold}",
+        fasta = genome_config["fasta"],
+        chrom_sizes = genome_config["chrom_sizes"],
+        chr_fold = genome_config["chr_fold"],
+        format = config['format']
+    resources:
+        gpu=1,
+        mem_mb=60000, 
+        # disk_mb=30720 
+    threads: 1
+    conda:
+        "chrombpnet"
     shell:
         """
+        if [[ -f {output} ]]; then
+            echo "Found model"
+        else
+            if [[ -d {params.out_dir} ]]; then
+                echo "Found logdir. Deleting previous model"
+                rm -rf {params.out_dir}
+            fi
+
+            echo "Training model"
+            chrombpnet pipeline \
+                -i{params.format} {input.input_file} \
+                -p {input.peaks} \
+                -n {input.negatives} \
+                -b {input.bias_model} \
+                -o {params.out_dir} \
+                -g {params.fasta} \
+                -c {params.chrom_sizes} \
+                -fl {params.chr_fold}/{wildcards.fold}.json \
+                -d "ATAC" 
+        fi
         """

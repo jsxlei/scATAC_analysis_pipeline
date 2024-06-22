@@ -1,13 +1,12 @@
 # Configuration for paths and parameters
 
-# Directory paths
 # Peak dir: peak_dir/{cell_type}{peak_suffix}, union_peak is a merged peak file over all peak files
 peak_dir: "/oak/stanford/groups/akundaje/leixiong/projects/mac_crzhang/J774_time_course_atac_crzhang/peaks"
 peak_suffix: "_peaks.narrowPeak" #"_peaks_overlap_filtered.narrowPeak"  # Peak file suffix
 union_peak: "/oak/stanford/groups/akundaje/leixiong/projects/mac_crzhang/J774_time_course_atac_crzhang/merged_peaks/union_peaks.narrowPeak"
 
 # Input files either fragments or bam files:
-# Fragment dir: input_dir/{cell_type}{input_suffix}
+# input_dir: input_dir/{cell_type}{input_suffix}
 input_dir: "/oak/stanford/groups/akundaje/leixiong/projects/mac_crzhang/J774_time_course_atac_crzhang/bams/deduped"
 input_suffix: ".noMT.filtered.deduped.bam"  # Input file suffix
 format: "bam"
@@ -19,7 +18,6 @@ motif_dir: "/oak/stanford/groups/akundaje/leixiong/genome/motifs"
 out_dir: "/oak/stanford/groups/akundaje/leixiong/projects/mac_crzhang/output"
 
 
-## Please DO NOT change the following configurations
 # Genome configuration include bias for running chrombpnet
 genome_build: hg38
 genome:
