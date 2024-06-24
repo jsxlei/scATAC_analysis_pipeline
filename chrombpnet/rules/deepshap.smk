@@ -29,6 +29,6 @@ rule deepshap:
                 -r {input.union_peak} \
                 -g {params.fasta} \
                 -c {params.chrom_sizes} \
-                -op {params.output_prefix} \
+                -op {params.output_prefix}
         fi
         """
