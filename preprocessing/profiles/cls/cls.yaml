@@ -1,0 +1,11 @@
+__default__:
+  jobname: "{rule}"
+  output: ".slurm/{rule}/{wildcards.cell_type}.out"
+  error: ".slurm/{rule}/{wildcards.cell_type}.err"
+  partition: akundaje,owners
+  gres: ""
+  time: "5-00:00:00"
+  n_node: 1
+  n_task: 1
+  n_cpu: "{threads}"
+  qos: "long"
