@@ -31,8 +31,6 @@ include: "rules/footprint.smk"
 include: "rules/make_datahub.smk"
 
 
-
-
 # Union negatives
 def list_negatives(wildcards):   
     return expand(output_config['negative_dir']+"/{fold}_negatives.bed", fold=FOLDS)

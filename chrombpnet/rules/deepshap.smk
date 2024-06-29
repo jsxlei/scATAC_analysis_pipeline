@@ -20,15 +20,32 @@ rule deepshap:
     shell:
         """
         mkdir -p {params.shap_dir}
-        if [[ -f {output.profile_shap} ]]; then
-            echo "Found shap scores"
+
+        if [[ -f {output.count_shap} ]]; then
+            echo "Found count shap scores"
         else
-            echo "Generate contribution score bigwigs"
+            echo "Generate counts contribution score bigwigs"
             chrombpnet contribs_bw \
                 -m {input.model} \
                 -r {input.union_peak} \
                 -g {params.fasta} \
                 -c {params.chrom_sizes} \
-                -op {params.output_prefix}
+                -op {params.output_prefix} \
+                -pc counts
         fi
+
+        if [[ -f {output.profile_shap} ]]; then
+            echo "Found shape shap scores"
+        else
+            echo "Generate shape contribution score bigwigs"
+            chrombpnet contribs_bw \
+                -m {input.model} \
+                -r {input.union_peak} \
+                -g {params.fasta} \
+                -c {params.chrom_sizes} \
+                -op {params.output_prefix} \
+                -pc profile
+        fi
+
+
         """
