@@ -38,9 +38,9 @@ out_dir:
 
 1. Run locally
 ```
-    snakemake -c 1 --config genome_build=mm10 --profile profiles/local
+    snakemake -c 1 --profile profiles/local --config genome_build=mm10
 ```
 2. Run with slurm on Clusters e.g. Sherlock at Stanford
 ```
-    snakemake -j30 --config genome_build=mm10 --profile profiles/cls
+    snakemake -j40 --profile profiles/cls --config genome_build=mm10 
 ```

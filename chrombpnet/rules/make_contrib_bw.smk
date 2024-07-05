@@ -7,6 +7,7 @@ rule make_contrib_bw:
         chrom_sizes = genome_config["chrom_sizes"],
         output_prefix = output_config["shap_dir"] + "/{cell_type}/average.{head}",
         peaks_file = config["union_peak"]    
+    threads: 16
     shell:
         """
         python3.8 scripts/importance_hdf5_to_bigwig.py \

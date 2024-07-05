@@ -19,7 +19,7 @@ rule train:
         gpu=1,
         mem_mb=60000, 
         # disk_mb=30720 
-    threads: 1
+    threads: 16
     conda:
         "chrombpnet"
     shell:

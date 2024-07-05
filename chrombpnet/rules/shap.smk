@@ -12,9 +12,11 @@ rule deepshap:
         shap_dir = output_config["shap_dir"]
     resources:
         nvidia_gpu=1,
-        mem_mb=100000
+        mem_mb=100000,
+        disk_mb=30000
     conda:
         "chrombpnet"
+    threads: 64
     shell:
         """
         mkdir -p {params.shap_dir}

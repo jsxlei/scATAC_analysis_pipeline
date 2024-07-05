@@ -21,10 +21,10 @@ FOLDS=config['fold']
 
 include: "rules/negatives.smk"
 include: "rules/train.smk"
-include: "rules/deepshap.smk"
+include: "rules/shap.smk"
 include: "rules/average_shap.smk"
-include: "rules/modisco.smk"
 include: "rules/make_contrib_bw.smk"
+include: "rules/modisco.smk"
 include: "rules/prediction.smk"
 include: "rules/hitcaller.smk"
 include: "rules/footprint.smk"
@@ -41,6 +41,12 @@ def list_models(wildcards):
 def list_shap(wildcards):
     return expand(output_config["shap_dir"] + "/{cell_type}/{fold}.{head}_scores.bw", cell_type=CELLTYPES, fold=config['fold'], head=config['head'])
 
+def list_average_shap(wildcards):
+    return expand(output_config["shap_dir"] + "/{cell_type}/average.{head}.h5", cell_type=CELLTYPES, head=config['head'])
+
+def list_average_shap_bw(wildcards):
+    return expand(output_config["shap_dir"] + "/{cell_type}/average.{head}.bw", cell_type=CELLTYPES, head=config['head'])
+
 def list_modisco(wildcards):
     return expand(output_config["modisco_dir"] + "/{cell_type}/{head}_modisco.h5", cell_type=CELLTYPES, head=config['head'])
 
@@ -52,11 +58,13 @@ def list_hitcaller(wildcards):
 shell.prefix("source scripts/env_setup.sh")
 
 rule all:
-    input: 
-        list_models,
-        list_shap,
-        list_modisco,
-        list_hitcaller
+    input:
+        list_models
+        # list_shap,
+        # list_average_shap,
+        # list_average_shap_bw,
+        # list_modisco,
+        # list_hitcaller
 
 
 

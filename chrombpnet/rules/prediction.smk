@@ -7,6 +7,7 @@ rule prediction:
     params:
     conda:
         "chrombpnet"
+    threads: 16
     shell:
         """
         python scripts/predict_and_avg.py \

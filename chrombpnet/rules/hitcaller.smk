@@ -12,6 +12,7 @@ rule hitcaller:
         alpha = 0.6,
     conda:
         "finemo_gpu"
+    threads: 16
     shell:
         """
         finemo extract-regions-h5 --h5s {input.shap_h5} --out-path {output.finemo_npz} --region-width 1000

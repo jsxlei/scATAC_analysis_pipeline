@@ -14,6 +14,7 @@ rule negatives:
         output_prefix = output_config["negative_dir"] + "/{fold}"
     conda:
         "chrombpnet"
+    threads: 16
     shell:
         """
         if [[ -f {output} ]]; then
