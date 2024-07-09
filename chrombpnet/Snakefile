@@ -59,8 +59,7 @@ shell.prefix("source scripts/env_setup.sh")
 
 rule all:
     input:
-        list_models
-        # list_shap,
+        list_shap,
         # list_average_shap,
         # list_average_shap_bw,
         # list_modisco,

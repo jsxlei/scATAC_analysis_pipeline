@@ -10,6 +10,8 @@ __default__:
   n_cpu: "{threads}"
 
 negative:
+  output: ".slurm/{rule}/{wildcards.fold}.out"
+  error: ".slurm/{rule}/{wildcards.fold}.err"
   partition: akundaje,owners
   time: "2-0"
   mem: "30G"
@@ -22,13 +24,13 @@ train:
   gres: "--gres=gpu:1"
   mem: "60G"
 
-deepshap:
+shap:
   output: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.fold}_{wildcards.head}.out"
   error: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.fold}_{wildcards.head}.err"
   partition: akundaje,owners,gpu
   time: "2-0"
   gres: "--gres=gpu:1"
-  mem: "60G"
+  mem: "100G"
 
 average_shap:
   partition: akundaje,owners,normal

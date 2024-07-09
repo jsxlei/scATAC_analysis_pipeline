@@ -1,4 +1,4 @@
-rule deepshap:
+rule shap:
     input:
         model = output_config["model_dir"] + "/{cell_type}/{fold}/models/chrombpnet_nobias.h5",
         union_peak = config["union_peak"],
@@ -13,10 +13,10 @@ rule deepshap:
     resources:
         nvidia_gpu=1,
         mem_mb=100000,
-        disk_mb=30000
+        disk_mb=40000
     conda:
         "chrombpnet"
-    threads: 64
+    threads: 32
     shell:
         """
         mkdir -p {params.shap_dir}
