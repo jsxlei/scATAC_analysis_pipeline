@@ -17,9 +17,8 @@ rule train:
         format = config['format']
     resources:
         gpu=1,
-        mem_mb=60000, 
-        # disk_mb=30720 
-    threads: 16
+        mem_mb=30000, 
+    threads: 4
     conda:
         "chrombpnet"
     shell:

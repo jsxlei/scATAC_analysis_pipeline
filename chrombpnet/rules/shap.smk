@@ -12,11 +12,11 @@ rule shap:
         shap_dir = output_config["shap_dir"]
     resources:
         nvidia_gpu=1,
-        mem_mb=100000,
+        mem_mb=80000,
         disk_mb=40000
     conda:
         "chrombpnet"
-    threads: 32
+    threads: 8
     shell:
         """
         mkdir -p {params.shap_dir}

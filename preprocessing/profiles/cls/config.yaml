@@ -1,4 +1,15 @@
-cluster: "sbatch -J {cluster.jobname} -p {cluster.partition} -t {cluster.time} --mem {cluster.mem} --requeue --open-mode=append -N {cluster.n_node} {cluster.gres} -n {cluster.n_task} -c {cluster.n_cpu} -o {cluster.output} -e {cluster.error}"
+cluster: "sbatch -J {cluster.jobname} 
+                  -p {cluster.partition} 
+                  -t {cluster.time} 
+                  --mem {cluster.mem} 
+                  --requeue 
+                  --open-mode=append 
+                  -N {cluster.n_node} 
+                  -n {cluster.n_task} 
+                  -c {cluster.n_cpu} 
+                  -o {cluster.output} 
+                  -e {cluster.error}
+                "
 cluster-config: profiles/cls/cls.yaml
 keep-going: true
 printshellcmds: true

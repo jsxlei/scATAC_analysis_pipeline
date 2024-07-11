@@ -1,29 +1,20 @@
 # Fragment folder
-input_frag_dir: "/users/leixiong/projects/imac_igvf/data/frags"
-input_barcode_dir: "/users/leixiong/projects/imac_igvf/2_chrombpnet/0_barcode/cell_type0"
-out_dir: "/users/leixiong/oak/tmp/preprocessing"
+frag_dir: "/oak/stanford/groups/akundaje/leixiong/projects/imac_igvf/data/frags"
+barcode_dir: "/oak/stanford/groups/akundaje/leixiong/projects/imac_igvf/results/2_chrombpnet/barcode"
+out_dir: "/oak/stanford/groups/akundaje/leixiong/projects/imac_igvf/results/2_chrombpnet/inputs"
 genome_dir: "/oak/stanford/groups/akundaje/leixiong/genome"
 
-frag_suffix: ".tsv.gz"
+frag_suffix: ".tsv"
 barcode_suffix: ".txt"
 peak_suffix: "_peaks_overlap_filtered.narrowPeak"
 
-sample_fragments: "1_sample_fragments"
-celltype_fragments: "2_celltype_fragments"
+
 output:
-  sample_fragments: 
-    fragments: "fragments"
-    pseudorep1: "pseudorep1"
-    pseudorep2: "pseudorep2"
-    pseudorepT: "pseudorepT"
-  celltype_fragments: 
-    fragments: "fragments"
-    pseudorep1: "pseudorep1"
-    pseudorep2: "pseudorep2"
-    pseudorepT: "pseudorepT"
+  sample_fragments: "1_sample_fragments"
+  celltype_fragments: "2_celltype_fragments"
   peaks: "3_peaks"
   bigwig: "4_bigwig"
-  union_peak: "5_union_peak"
+  union_peaks: "5_union_peak/union_peaks.narrowPeak"
 
 
 genome_build: hg38
@@ -41,4 +32,4 @@ genome:
     bias_model: "bias.h5"
     chr_fold: "splits"
 
-celltypes:
+cell_types: 

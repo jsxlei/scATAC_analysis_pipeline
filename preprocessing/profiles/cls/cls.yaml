@@ -1,11 +1,46 @@
 __default__:
   jobname: "{rule}"
-  output: ".slurm/{rule}/{wildcards.cell_type}.out"
-  error: ".slurm/{rule}/{wildcards.cell_type}.err"
-  partition: akundaje,owners
+  output: ".slurm/{rule}.out"
+  error: ".slurm/{rule}.err"
+  partition: akundaje,owners,normal
   gres: ""
-  time: "5-00:00:00"
+  time: "2-0"
   n_node: 1
   n_task: 1
   n_cpu: "{threads}"
-  qos: "long"
+  mem: "20G"
+
+extract_sample_fragments:
+  output: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.sample}.out"
+  error: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.sample}.err"
+  partition: akundaje,owners,normal
+  time: "2-0"
+  mem: "30G"
+
+callpeak:
+  output: ".slurm/{rule}/{wildcards.cell_type}.out"
+  error: ".slurm/{rule}/{wildcards.cell_type}.err"
+  partition: akundaje,owners,normal
+  time: "2-0"
+  mem: "30G"
+
+make_bigwig:
+  output: ".slurm/{rule}/{wildcards.cell_type}.out"
+  error: ".slurm/{rule}/{wildcards.cell_type}.err"
+  partition: akundaje,owners,normal
+  time: "2-0"
+  mem: "30G"
+
+group_celltype:
+  output: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.sample}.out"
+  error: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.sample}.err"
+  partition: akundaje,owners,normal
+  time: "2-0"
+  mem: "30G"
+
+zcat:
+  output: ".slurm/{rule}/{wildcards.sample}.out"
+  error: ".slurm/{rule}/{wildcards.sample}.err"
+  partition: akundaje,owners,normal
+  time: "2-0"
+  mem: "30G"

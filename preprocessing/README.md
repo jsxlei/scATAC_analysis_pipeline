@@ -7,9 +7,9 @@ This is a snakemake pipeline.
 create chrombpnet enviroment following https://github.com/kundajelab/chrombpnet
 
 ## Custom input and output
-To apply to your computer, fill in the [[config.yml]] file with 
-- input_frag_dir 
-- input_barcode_dir 
+To apply to your computer, fill in the `config.yml` file with 
+- frag_dir: path to original fragment files
+- barcode_dir: path to input barcode_sample.txt 
 - out_dir
 - genome_dir
 
@@ -41,7 +41,7 @@ genome_dir
 # Start
 ** If on a PC or single node
 ```
-snakemake -c $(nproc) --use-conda --until all
+snakemake -c $(nproc)
 ```
 ## Output
 out_dir
