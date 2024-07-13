@@ -16,7 +16,7 @@ rule shap:
         disk_mb=40000
     conda:
         "chrombpnet"
-    threads: 8
+    threads: 12
     shell:
         """
         mkdir -p {params.shap_dir}
