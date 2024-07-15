@@ -8,52 +8,38 @@ __default__:
   n_node: 1
   n_task: 1
   n_cpu: "{threads}"
+  mem: "30G"
 
 negative:
   output: ".slurm/{rule}/{wildcards.fold}.out"
   error: ".slurm/{rule}/{wildcards.fold}.err"
-  partition: akundaje,owners
-  time: "2-0"
-  mem: "30G"
+  partition: akundaje,owners,normal
 
 train:
   output: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.fold}.out"
   error: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.fold}.err"
   partition: akundaje,owners,gpu
-  time: "2-0"
   gres: "--gres=gpu:1"
-  mem: "60G"
 
 shap:
   output: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.fold}_{wildcards.head}.out"
   error: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.fold}_{wildcards.head}.err"
   partition: akundaje,owners,gpu
-  time: "2-0"
   gres: "--gres=gpu:1"
-  mem: "80G"
+  mem: "{resources.mem_gb}G"
 
 average_shap:
   partition: akundaje,owners,normal
-  time: "2-0"
-  mem: "30G"
 
 modisco:
   partition: akundaje,owners
-  time: "7-0"
-  mem: "50G"
 
 generate_prediction:
-  partition: akundaje,owners
-  time: "5-0"
-  mem: "30G"
+  partition: akundaje,owners,normal
 
 make_contrib_bw:
-  partition: akundaje,owners
-  time: "7-0"
-  mem: "30G"
+  partition: akundaje,owners,normal
 
 hitcaller:
   partition: akundaje,owners,gpu
-  time: "2-0"
   gres: "--gres=gpu:1"
-  mem: "40G"

@@ -60,10 +60,10 @@ shell.prefix("source scripts/env_setup.sh")
 rule all:
     input:
         list_shap,
-        # list_average_shap,
-        # list_average_shap_bw,
-        # list_modisco,
-        # list_hitcaller
+        list_average_shap,
+        list_average_shap_bw,
+        list_modisco,
+        list_hitcaller
 
 
 

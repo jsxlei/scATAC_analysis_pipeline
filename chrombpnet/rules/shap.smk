@@ -10,13 +10,13 @@ rule shap:
         chrom_sizes = genome_config["chrom_sizes"],
         output_prefix = output_config["shap_dir"] + "/{cell_type}/{fold}",
         shap_dir = output_config["shap_dir"]
+        n_peaks = pd.read_csv(config['union_peak'], sep='\t').shape[0]
     resources:
         nvidia_gpu=1,
-        mem_mb=80000,
-        disk_mb=40000
+        mem_gb=lambda wildcards, attempt: params.n_peaks / 5000,  # Adjust memory based on number of samples
     conda:
         "chrombpnet"
-    threads: 12
+    threads: lambda wildcards, attempt: min(4, int(params.n_peaks / 25000))
     shell:
         """
         mkdir -p {params.shap_dir}
