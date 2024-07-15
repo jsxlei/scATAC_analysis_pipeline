@@ -9,7 +9,7 @@ rule shap:
         fasta = genome_config["fasta"],
         chrom_sizes = genome_config["chrom_sizes"],
         output_prefix = output_config["shap_dir"] + "/{cell_type}/{fold}",
-        shap_dir = output_config["shap_dir"]
+        shap_dir = output_config["shap_dir"],
         n_peaks = pd.read_csv(config['union_peak'], sep='\t').shape[0]
     resources:
         nvidia_gpu=1,
