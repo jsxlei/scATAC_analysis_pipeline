@@ -1,3 +1,3 @@
 *.snakemake
 *.slurm
-*config.yaml
+**/config.yaml

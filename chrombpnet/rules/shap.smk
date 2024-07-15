@@ -1,3 +1,5 @@
+import pandas as pd
+
 rule shap:
     input:
         model = output_config["model_dir"] + "/{cell_type}/{fold}/models/chrombpnet_nobias.h5",
