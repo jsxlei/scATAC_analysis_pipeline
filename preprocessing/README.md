@@ -5,6 +5,10 @@ This is a snakemake pipeline.
 # Before Start
 ## Installation
 create chrombpnet enviroment following https://github.com/kundajelab/chrombpnet
+create callpeak enviroment
+```
+conda env create --file=envs/callpeak.yaml
+```
 
 ## Custom input and output
 To apply to your computer, fill in the `config.yml` file with 
@@ -18,7 +22,7 @@ Make genome dir in this structure:
 genome_dir
 - hg38
     - fasta: "hg38.fa"
-    - chrom_sizes: "hg38.chrom.sizes"
+    - chrom_sizes: "hg38.chrom.sizes" # This chrom size files needs sorted by 1,10,11,...2,20,..
     - blacklist: "blacklist.bed.gz"
     - bias: "bias.h5"
     - chr_fold: "splits"
@@ -29,7 +33,7 @@ genome_dir
         - fold_4.json
 - mm10
     - fasta: "mm10.fa"
-    - chrom_sizes: "mm10.chrom.sizes"
+    - chrom_sizes: "mm10.chrom.sizes" # # This chrom size files needs sorted by 1,10,11,...2,20,..
     - blacklist: "mm10.blacklist2.bed" 
     - bias: "bias.h5"
     - chr_fold: "splits"
@@ -39,9 +43,14 @@ genome_dir
         - fold_3.json
         - fold_4.json
 # Start
-** If on a PC or single node
+** If on a PC or single node, -c $(nproc) is the number of cores you would like to use to run
 ```
-snakemake -c $(nproc)
+snakemake -c 20 --profile profiles/local
+```
+
+** If on slurm-based cluster e.g. sherlock at Stanford
+```
+snakemake -j 30 --profile profiles/cls
 ```
 ## Output
 out_dir

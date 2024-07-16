@@ -4,7 +4,7 @@ __default__:
   error: ".slurm/{rule}.err"
   partition: akundaje,owners,normal
   gres: ""
-  time: "2-0"
+  time: "8:00:00"
   n_node: 1
   n_task: 1
   n_cpu: "{threads}"
