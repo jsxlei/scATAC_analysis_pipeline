@@ -7,7 +7,7 @@ rule callpeak:
     output:
         peak_dir+"/{cell_type}"+config["peak_suffix"]
     conda:
-        "../envs/callpeak.yaml"
+        "callpeak"
     shell:
         """
         bash scripts/call_peaks.sh {wildcards.cell_type} {celltype_frag_dir} {peak_dir} {params.chrom_sizes} {params.blacklist}
