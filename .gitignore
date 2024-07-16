@@ -1,3 +1,4 @@
 *.snakemake
 *.slurm
-**/config.yaml
+preprocessing/config.yaml
+chrombpnet/config.yaml

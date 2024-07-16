@@ -54,7 +54,7 @@ callpeak () {
 	macs2 bdgcmp -m ppois -t ${out_dir}/${dataset}_pseudoreplicate1_treat_pileup.bdg -c ${out_dir}/${dataset}_pseudoreplicate1_control_lambda.bdg -o ${out_dir}/${dataset}_pseudoreplicate1_ppois.bdg & macs2 bdgcmp -m ppois -t ${out_dir}/${dataset}_pseudoreplicate2_treat_pileup.bdg -c ${out_dir}/${dataset}_pseudoreplicate2_control_lambda.bdg -o ${out_dir}/${dataset}_pseudoreplicate2_ppois.bdg & macs2 bdgcmp -m ppois -t ${out_dir}/${dataset}_pseudoreplicateT_treat_pileup.bdg -c ${out_dir}/${dataset}_pseudoreplicateT_control_lambda.bdg -o ${out_dir}/${dataset}_pseudoreplicateT_ppois.bdg
 	echo "${dataset} combining p-value bedgraphs"
 	macs2 cmbreps -m fisher -i ${out_dir}/${dataset}_pseudoreplicate1_ppois.bdg ${out_dir}/${dataset}_pseudoreplicate2_ppois.bdg ${out_dir}/${dataset}_pseudoreplicateT_ppois.bdg -o ${out_dir}/${dataset}_combined_ppois.bdg
-	sort -k1,1 -k2,2n -S 10% --parallel=4 ${out_dir}/${dataset}_combined_ppois.bdg | head -n -1 > ${out_dir}/${dataset}_combined_ppois_sorted.bdg
+	sort -k1,1 -k2,2n -S 10% ${out_dir}/${dataset}_combined_ppois.bdg | head -n -1 > ${out_dir}/${dataset}_combined_ppois_sorted.bdg
 	echo "${dataset} converting p-value bedgraphs to bigwigs"
 	bedGraphToBigWig ${out_dir}/${dataset}_combined_ppois_sorted.bdg ${chr_order} ${out_dir}/${dataset}_pval.bw
 
