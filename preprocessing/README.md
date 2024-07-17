@@ -12,8 +12,14 @@ conda env create --file=envs/callpeak.yaml
 
 ## Custom input and output
 To apply to your computer, fill in the `config.yml` file with 
-- frag_dir: path to original fragment files
-- barcode_dir: path to input barcode_sample.txt 
+- frag_dir: path to original fragment files, e.g. 
+    - lane1.tsv.gz
+    - lane2.tsv.gz 
+- barcode_dir: path to input barcode files in the name format of sample-celltype.txt, e.g.
+    - lane1-celltypeA.txt
+    - lane2-celltypeA.txt
+    - lane1-celltypeB.txt
+    - lane2-celltypeB.txt
 - out_dir
 - genome_dir
 

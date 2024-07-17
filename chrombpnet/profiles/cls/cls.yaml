@@ -10,7 +10,7 @@ __default__:
   n_cpu: "{threads}"
   mem: "30G"
 
-negative:
+negatives:
   output: ".slurm/{rule}/{wildcards.fold}.out"
   error: ".slurm/{rule}/{wildcards.fold}.err"
   partition: akundaje,owners,normal
