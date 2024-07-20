@@ -13,7 +13,7 @@ conda install -c bioconda snakemake=7
 cd preprocessing
 ```
 
-### Run ChromBPnet
+### Run ChromBPNet
 ```
 cd chrombpnet
 ```
