@@ -43,7 +43,7 @@ def main(args):
 	deepshap_output = {"projected_shap": {"seq": avg_projected_shap},
 					"raw": {"seq": raw},
 					"shap": {"seq": avg_shap}}
-	deepdish.io.save(f"{base_dir}/average.{shaptype}_scores.h5", deepshap_output)
+	deepdish.io.save(f"{base_dir}/average.{shaptype}.h5", deepshap_output)
 
 	# done.
 
