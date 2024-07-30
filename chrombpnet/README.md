@@ -54,3 +54,21 @@ snakemake -c 1 --profile profiles/local --config genome_build=mm10
 ```
 snakemake -j40 --profile profiles/cls --config genome_build=mm10 
 ```
+
+## Output
+All the results will be saved under the out_dir your define in the config.yaml file
+- negatives
+- models
+- shap
+
+## Log
+- slurm log scATAC_analysis_pipeline/chrombpnet/.slurm
+- job submit log is in scATAC_analysis_pipeline/chrombpnet/.snakemake/log/
+
+## Customize
+1. Setup environments
+    - scripts/env_setup.sh # Make sure you can use gpu with tensorflow version=2.8.0 on such environment
+2. Partitions
+Modify the profiles/cls/cls.yaml
+    - the default partition is akundaje, owners, gpus for gpu jobs
+    - the default partition is akundaje, owners, normal for cpu jobs

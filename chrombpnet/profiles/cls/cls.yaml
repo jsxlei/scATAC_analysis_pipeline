@@ -20,6 +20,7 @@ train:
   error: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.fold}.err"
   partition: akundaje,owners,gpu
   gres: "--gres=gpu:1"
+  mem: "{resources.mem_gb}G"
 
 shap:
   output: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.fold}_{wildcards.head}.out"

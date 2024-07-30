@@ -21,7 +21,7 @@ rule shap:
         mem_gb=lambda wildcards, attempt: mem_gb,  # Adjust memory based on number of samples
     conda:
         "chrombpnet"
-    threads: lambda wildcards, attempt: threads
+    threads: 2
     shell:
         """
         mkdir -p {params.shap_dir}
