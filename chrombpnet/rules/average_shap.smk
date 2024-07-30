@@ -1,6 +1,7 @@
 rule average_shap:
     input:
-        lambda wildcards: expand(output_config["shap_dir"] + "/{cell_type}/{fold}.{head}_scores.h5", fold = config['fold'])
+        lambda wildcards: expand(output_config["shap_dir"] + "/{cell_type}/{fold}.{head}_scores.h5", fold = config['fold'], cell_type=wildcards.cell_type,
+            head=wildcards.head)
     output:
         output_config["shap_dir"] + "/{cell_type}/average.{head}.h5",
     params:
