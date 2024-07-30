@@ -72,3 +72,5 @@ All the results will be saved under the out_dir your define in the config.yaml f
 Modify the profiles/cls/cls.yaml
     - the default partition is akundaje, owners, gpus for gpu jobs
     - the default partition is akundaje, owners, normal for cpu jobs
+3. Config
+Use --config option=your_choice to modify the config parameters in the config.yaml without modifying it.

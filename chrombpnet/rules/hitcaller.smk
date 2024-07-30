@@ -9,7 +9,7 @@ rule hitcaller:
         finemo_bed = output_config["hitcaller_dir"] + "/{cell_type}/{head}/hits.bed.gz",
     params:
         finemo_out = output_config["hitcaller_dir"] + "/{cell_type}/{head}",
-        alpha = 0.6,
+        alpha = config['alpha'],
     conda:
         "finemo_gpu"
     threads: 16

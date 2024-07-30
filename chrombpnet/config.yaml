@@ -1,22 +1,21 @@
 # Configuration for paths and parameters
 
 # Peak dir: peak_dir/{cell_type}{peak_suffix}, union_peak is a merged peak file over all peak files
-peak_dir: "/oak/stanford/groups/akundaje/leixiong/projects/mac_crzhang/J774_time_course_atac_crzhang/peaks"
-peak_suffix: "_peaks.narrowPeak" #"_peaks_overlap_filtered.narrowPeak"  # Peak file suffix
-union_peak: "/oak/stanford/groups/akundaje/leixiong/projects/mac_crzhang/J774_time_course_atac_crzhang/merged_peaks/union_peaks.narrowPeak"
+peak_dir: 
+peak_suffix: #"_peaks_overlap_filtered.narrowPeak"  # Peak file suffix
+union_peak: # "union_peaks.narrowPeak"
 
 # Input files either fragments or bam files:
 # input_dir: input_dir/{cell_type}{input_suffix}
-input_dir: "/oak/stanford/groups/akundaje/leixiong/projects/mac_crzhang/J774_time_course_atac_crzhang/bams/deduped"
-input_suffix: ".noMT.filtered.deduped.bam"  # Input file suffix
-format: "bam"
+input_dir: 
+input_suffix:   # .bam
+format:  # bam
+
+out_dir:
 
 # Genome and motif directories
 genome_dir: "/oak/stanford/groups/akundaje/leixiong/genome"
 motif_dir: "/oak/stanford/groups/akundaje/leixiong/genome/motifs"
-
-out_dir: "/oak/stanford/groups/akundaje/leixiong/projects/mac_crzhang/output"
-
 
 # Genome configuration include bias for running chrombpnet
 genome_build: hg38
@@ -57,5 +56,7 @@ out:
   hitcaller_dir: "hitcaller"
 
 head: ['counts', 'profile']
+
+alpha: 0.7 # alpha for hitcaller
 
 tmpdir: "/tmp"

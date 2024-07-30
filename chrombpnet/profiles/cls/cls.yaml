@@ -31,9 +31,11 @@ shap:
 
 average_shap:
   partition: akundaje,owners,normal
+  mem: "{resources.mem_gb}G"
+  time: "06:00:00"
 
 modisco:
-  partition: akundaje,owners
+  partition: akundaje,owners,normal
 
 generate_prediction:
   partition: akundaje,owners,normal
