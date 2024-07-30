@@ -30,6 +30,8 @@ shap:
   mem: "{resources.mem_gb}G"
 
 average_shap:
+  output: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.head}.out"
+  error: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.head}.err"
   partition: akundaje,owners,normal
   mem: "{resources.mem_gb}G"
   time: "06:00:00"
