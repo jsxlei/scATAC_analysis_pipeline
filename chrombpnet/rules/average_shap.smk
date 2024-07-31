@@ -30,7 +30,7 @@ rule average_shap:
         if [[ -f {output.bw }]]; then
             echo "Found bigwig file"
         else
-            python3.8 scripts/importance_hdf5_to_bigwig.py \
+            python scripts/importance_hdf5_to_bigwig.py \
                 --hdf5 {input} \
                 --regions {params.peaks_file} \
                 --chrom-sizes {params.chrom_sizes} \
