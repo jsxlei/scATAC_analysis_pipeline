@@ -27,7 +27,7 @@ rule average_shap:
                 --folds {params.folds}
         fi
 
-        if [[ -f {output.bw }]]; then
+        if [[ -f {output.bw} ]]; then
             echo "Found bigwig file"
         else
             python scripts/importance_hdf5_to_bigwig.py \
