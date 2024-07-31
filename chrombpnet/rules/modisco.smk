@@ -13,6 +13,8 @@ rule modisco:
         report_outdir=output_config["modisco_dir"] + "/{cell_type}/motiisco/{head}",
         img_suffix_dir="./",
     threads: 16
+    resources:
+        mem_gb: 50
     conda:
         "chrombpnet"
     shell:

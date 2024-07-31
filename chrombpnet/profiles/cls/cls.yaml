@@ -1,7 +1,7 @@
 __default__:
   jobname: "{rule}"
-  output: ".slurm/{rule}/{wildcards.cell_type}.out"
-  error: ".slurm/{rule}/{wildcards.cell_type}.err"
+  output: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.head}.out"
+  error: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.head}.err"
   partition: akundaje
   gres: ""
   time: "2-0"
@@ -30,14 +30,13 @@ shap:
   mem: "{resources.mem_gb}G"
 
 average_shap:
-  output: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.head}.out"
-  error: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.head}.err"
   partition: akundaje,owners,normal
   mem: "{resources.mem_gb}G"
   time: "06:00:00"
 
 modisco:
   partition: akundaje,owners,normal
+  mem: "{resources.mem_gb}G"
 
 generate_prediction:
   partition: akundaje,owners,normal
