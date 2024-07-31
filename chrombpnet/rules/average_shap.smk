@@ -1,13 +1,13 @@
 rule average_shap:
     input:
-        lambda wildcards: expand(output_config["shap_dir"] + "/{cell_type}/{fold}.{head}_scores.h5", fold = config['fold'], cell_type=wildcards.cell_type,
-            head=wildcards.head)
+        lambda wildcards: expand(output_config["shap_dir"] + "/{cell_type}/{fold}.{head}_scores.h5", 
+            fold = config['fold'], cell_type=wildcards.cell_type, head=wildcards.head)
     output:
         h5 = output_config["shap_dir"] + "/{cell_type}/average.{head}.h5",
         bw = output_config["shap_dir"] + "/{cell_type}/average.{head}.bw",
     params:
         folds = config['fold'],
-        base_dir = output_config['shap_dir'] + "/{cell_type}" 
+        base_dir = output_config['shap_dir'] + "/{cell_type}",
         chrom_sizes = genome_config["chrom_sizes"],
         output_prefix = output_config["shap_dir"] + "/{cell_type}/average.{head}",
         peaks_file = config["union_peak"]  
