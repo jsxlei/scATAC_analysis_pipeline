@@ -19,7 +19,12 @@ rule modisco:
         "chrombpnet"
     shell:
         """
-        modisco motifs -i {input} -n {params.max_seqlets} -l {params.num_leiden} -o {output.modisco_output}
+        if [[ -f {output.modisco_output} ]]; then
+            echo "Found modisco_h5"
+        else
+            modisco motifs -i {input} -n {params.max_seqlets} -l {params.num_leiden} -o {output.modisco_output}
+        fi
+
         modisco report -i {output.modisco_output} -o {params.report_outdir} -s {params.img_suffix_dir} -m {params.meme_db} -n {params.num_matches}
         modisco meme -i {output.modisco_output} -t PFM -o {output.output_memedb}
         """

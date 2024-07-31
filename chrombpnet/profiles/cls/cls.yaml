@@ -32,18 +32,16 @@ shap:
 average_shap:
   partition: akundaje,owners,normal
   mem: "{resources.mem_gb}G"
-  time: "06:00:00"
+  time: "08:00:00"
 
 modisco:
   partition: akundaje,owners,normal
   mem: "{resources.mem_gb}G"
 
+hitcaller:
+  partition: akundaje,owners,gpu,dev
+  gres: "--gres=gpu:1"
+  time: "02:00:00"
+
 generate_prediction:
   partition: akundaje,owners,normal
-
-make_contrib_bw:
-  partition: akundaje,owners,normal
-
-hitcaller:
-  partition: akundaje,owners,gpu
-  gres: "--gres=gpu:1"
