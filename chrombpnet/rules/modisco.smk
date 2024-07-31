@@ -14,7 +14,7 @@ rule modisco:
         img_suffix_dir="./",
     threads: 16
     resources:
-        mem_gb: 50
+        mem_gb=50
     conda:
         "chrombpnet"
     shell:
