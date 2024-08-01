@@ -31,7 +31,7 @@ rule average_shap:
             echo "Found bigwig file"
         else
             python scripts/importance_hdf5_to_bigwig.py \
-                --hdf5 {input} \
+                --hdf5 {output.h5} \
                 --regions {params.peaks_file} \
                 --chrom-sizes {params.chrom_sizes} \
                 --output-prefix {params.output_prefix}
