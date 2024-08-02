@@ -10,7 +10,7 @@ rule modisco:
         num_leiden=config['modisco']['num_leiden'],
         num_matches=config['modisco']['num_matches'],
         meme_db=motif_config['meme_db'],
-        report_outdir=output_config["modisco_dir"] + "/{cell_type}/motiisco/{head}",
+        report_outdir=output_config["modisco_dir"] + "/{cell_type}/modisco/{head}",
         img_suffix_dir="./",
     threads: 16
     resources:
