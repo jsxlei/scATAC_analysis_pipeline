@@ -19,8 +19,8 @@ rule hitcaller:
     shell:
         """
         finemo extract-regions-h5 --h5s {input.shap_h5} --out-path {output.finemo_npz} --region-width 1000
-        finemo call-hits --regions {output.finemo_npz} --modisco-h5 {input.modisco_h5} --peaks {input.peaks_bed} --alpha {params.alpha} --out-dir {params.finemo_out} --motif-names
-        finemo report --hits {output.finemo_hits} --regions {output.finemo_npz} --modisco-h5 {input.modisco_h5} --peaks {input.peaks_bed} --out-dir {params.finemo_out} --motif-names
+        finemo call-hits --regions {output.finemo_npz} --modisco-h5 {input.modisco_h5} --peaks {input.peaks_bed} --alpha {params.alpha} --out-dir {params.finemo_out}
+        finemo report --hits {output.finemo_hits} --regions {output.finemo_npz} --modisco-h5 {input.modisco_h5} --peaks {input.peaks_bed} --out-dir {params.finemo_out}
 
         if [[ -f "{params.finemo_out}/hits.bed" ]]; then 
             
