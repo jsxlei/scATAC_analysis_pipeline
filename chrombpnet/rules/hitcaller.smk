@@ -12,6 +12,9 @@ rule hitcaller:
         alpha = config['alpha'],
     conda:
         "finemo_gpu"
+    resources:
+        nvidia_gpu=1,
+        mem_gb=30,
     threads: 1
     shell:
         """

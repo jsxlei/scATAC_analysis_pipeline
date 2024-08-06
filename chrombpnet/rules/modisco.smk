@@ -12,13 +12,19 @@ rule modisco:
         meme_db=motif_config['meme_db'],
         report_outdir=output_config["modisco_dir"] + "/{cell_type}/modisco/{head}",
         img_suffix_dir="./",
-    threads: 16
+    threads: 4
     resources:
         mem_gb=50
     conda:
         "chrombpnet"
     shell:
         """
+        module load libxml2
+        module load libxslt
+        module load perl
+        module load zlib
+        module load ghostscript
+
         if [[ -f {output.modisco_output} ]]; then
             echo "Found modisco_h5"
         else
