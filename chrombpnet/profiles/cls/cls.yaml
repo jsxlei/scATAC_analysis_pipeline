@@ -39,7 +39,7 @@ modisco:
   mem: "{resources.mem_gb}G"
 
 hitcaller:
-  partition: akundaje,owners,gpu,dev
+  partition: akundaje,owners,gpu
   gres: "--gres=gpu:1"
   time: "02:00:00"
 
