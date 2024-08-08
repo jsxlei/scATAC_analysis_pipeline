@@ -2,7 +2,7 @@ rule hitcaller:
     input:
         shap_h5 = output_config["shap_dir"] + "/{cell_type}/average.{head}.h5",
         modisco_h5 = output_config["modisco_dir"] + "/{cell_type}/{head}_modisco.h5",
-        modisco_html = output_config["modisco_dir] + "/{cell_type}/modisco/{head}/motifs.html",
+        modisco_html = output_config["modisco_dir"] + "/{cell_type}/modisco/{head}/motifs.html",
         peaks_bed = config["union_peak"],
     output:
         finemo_npz = output_config["hitcaller_dir"] + "/{cell_type}/{head}/regions.npz",
