@@ -14,7 +14,7 @@ rule average_shap:
     conda:
         "chrombpnet"
     resources:
-        mem_gb=60
+        mem_gb=80
     threads: 4
     shell:
         """
