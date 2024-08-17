@@ -18,12 +18,6 @@ rule modisco:
         "chrombpnet"
     shell:
         """
-        module load libxml2
-        module load libxslt
-        module load perl
-        module load zlib
-        module load ghostscript
-
         if [[ -f {output.modisco_output} ]]; then
             echo "Found modisco_h5"
         else
@@ -31,4 +25,4 @@ rule modisco:
         fi
 
         """
-        # modisco report -i {output.modisco_output} -o {params.report_outdir} -s {params.img_suffix_dir} -m {params.meme_db} -n {params.num_matches}
+        
