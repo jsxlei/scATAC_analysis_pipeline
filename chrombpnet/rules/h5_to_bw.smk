@@ -1,6 +1,6 @@
 rule h5_to_bw:
     input:
-        output_config["modisco_dir"] + "/{cell_type}/{head}_modisco.h5",
+        output_config["modisco_dir"] + "/{cell_type}/average.{head}.h5",
     output:
         output_config["shap_dir"] + "/{cell_type}/average.{head}.bw"
     params:
