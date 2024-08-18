@@ -23,6 +23,7 @@ include: "rules/negatives.smk"
 include: "rules/train.smk"
 include: "rules/shap.smk"
 include: "rules/average_shap.smk"
+include: "rules/h5_to_bw.smk"
 include: "rules/modisco.smk"
 include: "rules/report_modisco.smk"
 include: "rules/hitcaller.smk"
@@ -41,10 +42,13 @@ def list_shap(wildcards):
     return expand(output_config["shap_dir"] + "/{cell_type}/{fold}.{head}_scores.bw", cell_type=CELLTYPES, fold=config['fold'], head=config['head'])
 
 def list_average_shap(wildcards):
-    return expand(output_config["shap_dir"] + "/{cell_type}/average.{head}.{suffix}", cell_type=CELLTYPES, head=config['head'], suffix=['h5'])
+    return expand(output_config["shap_dir"] + "/{cell_type}/average.{head}.{suffix}", cell_type=CELLTYPES, head=config['head'], suffix=['h5', 'bw'])
 
 def list_modisco(wildcards):
     return expand(output_config["modisco_dir"] + "/{cell_type}/{head}_modisco.h5", cell_type=CELLTYPES, head=config['head'])
+
+def list_modisco_motif(wildcards):
+    return expand(output_config["modisco_dir"] + "/{cell_type}/modisco/{head}//motifs.html", cell_type=CELLTYPES, head=config['head'])
 
 def list_hitcaller(wildcards):
     return expand(output_config["hitcaller_dir"] + "/{cell_type}/{head}/hits.bed.gz", cell_type=CELLTYPES, head=config['head'])

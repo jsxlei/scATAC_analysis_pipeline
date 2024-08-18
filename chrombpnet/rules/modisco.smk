@@ -3,7 +3,6 @@ rule modisco:
         output_config["shap_dir"] + "/{cell_type}/average.{head}.h5",
     output:
         modisco_output = output_config["modisco_dir"] + "/{cell_type}/{head}_modisco.h5",
-        # report_html = output_config["modisco_dir"] + "/{cell_type}/modisco/{head}/motifs.html",
     params:
         max_seqlets=config['modisco']['max_seqlets'],
         num_leiden=config['modisco']['num_leiden'],
