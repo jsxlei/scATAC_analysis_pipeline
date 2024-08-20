@@ -1,6 +1,6 @@
 if [ -z "$SLURM_JOB_ID" ]; then
     echo "RUNNING LOCALLY"
-    export CUDNN=cudnn-8.1_cuda11.2
+    export CUDNN=cudnn-linux-x86_64-8.1.1_cuda11-archive
     export cuda=cuda-11.2
     export LD_LIBRARY_PATH=/usr/local/$cuda/lib64:/usr/local/$CUDNN/lib64:/usr/local/$CUDNN/include:/usr/local/$cuda/extras/CUPTI/lib64:/usr/local/lib:$LD_LIBRARY_PATH
     export PATH=/usr/local/$cuda/bin:$PATH

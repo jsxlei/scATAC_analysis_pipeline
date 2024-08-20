@@ -32,11 +32,12 @@ shap:
 average_shap:
   partition: akundaje,owners,normal
   mem: "{resources.mem_gb}G"
-  time: "08:00:00"
+  time: "12:00:00"
 
 modisco:
-  partition: akundaje,owners,normal
+  partition: akundaje
   mem: "{resources.mem_gb}G"
+  time: "7-0"
 
 hitcaller:
   partition: akundaje,owners,gpu
