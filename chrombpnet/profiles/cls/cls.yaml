@@ -2,7 +2,7 @@ __default__:
   jobname: "{rule}"
   output: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.head}.out"
   error: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.head}.err"
-  partition: akundaje
+  partition: akundaje,owners,normal
   gres: ""
   time: "2-0"
   n_node: 1
@@ -38,6 +38,11 @@ modisco:
   partition: akundaje
   mem: "{resources.mem_gb}G"
   time: "7-0"
+
+report_modisco:
+  partition: akundaje,owners,normal
+  mem: "{resources.mem_gb}G"
+  time: "2-0"
 
 hitcaller:
   partition: akundaje,owners,gpu

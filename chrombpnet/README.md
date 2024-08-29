@@ -13,7 +13,7 @@
 1. Enviroments
     - snakemake (version=7*)
     - chrombpnet
-    - finemo_gpu
+    - finemo_gpu (also install bs4, pandas, lxml)
     
 2. Genome data      
     Download from here

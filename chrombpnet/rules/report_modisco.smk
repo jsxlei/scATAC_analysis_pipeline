@@ -10,9 +10,9 @@ rule report_modisco:
         meme_db=motif_config['meme_db'],
         report_outdir=output_config["modisco_dir"] + "/{cell_type}/modisco/{head}",
         img_suffix_dir="./",
-    threads: 8
+    threads: 1
     resources:
-        mem_gb=80
+        mem_gb=20
     conda:
         "chrombpnet"
     shell:

@@ -9,7 +9,6 @@ rule average_shap:
         base_dir = output_config['shap_dir'] + "/{cell_type}",
         chrom_sizes = genome_config["chrom_sizes"],
         output_prefix = output_config["shap_dir"] + "/{cell_type}/average.{head}",
-        peaks_file = config["union_peak"]  
     conda:
         "chrombpnet"
     resources:
