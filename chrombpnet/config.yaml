@@ -38,7 +38,7 @@ fold: ['fold_0', 'fold_1', 'fold_2', 'fold_3', 'fold_4']
 # Modisco configuration files
 motif:
   motif_to_pwm: "motif_to_pwm.tsv"
-  meme_db: "motifs.meme.txt"
+  meme_db: "all.dbs.meme" #"motifs.meme.txt"
 
 
 modisco:

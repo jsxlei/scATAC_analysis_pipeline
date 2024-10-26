@@ -10,6 +10,7 @@ rule hitcaller:
         finemo_bed = output_config["hitcaller_dir"] + "/{cell_type}/{head}/hits.bed.gz",
     params:
         finemo_out = output_config["hitcaller_dir"] + "/{cell_type}/{head}",
+        meta_file = config['motif_dir'] + "/metadata.tsv"
         alpha = config['alpha'],
     conda:
         "finemo_gpu"
@@ -28,9 +29,9 @@ rule hitcaller:
             # bgzip and index hits
             module load biology samtools
 
-            python scripts/rename_motif.py --motif_html {input.modisco_html} --bed {params.finemo_out}/hits.bed
-            bgzip -c {params.finemo_out}/hits.bed > {params.finemo_out}/hits.bed.gz
-            tabix -p bed {params.finemo_out}/hits.bed.gz
+            python scripts/rename_motif.py --motif_html {input.modisco_html} --bed {params.finemo_out}/hits.bed --motif_meta {params.meta_file}
+            # bgzip -c {params.finemo_out}/hits.bed > {params.finemo_out}/hits.bed.gz
+            # tabix -p bed {params.finemo_out}/hits.bed.gz
 
         fi
         """
