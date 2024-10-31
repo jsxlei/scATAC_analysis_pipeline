@@ -3,15 +3,16 @@ rule hitcaller:
         shap_h5 = output_config["shap_dir"] + "/{cell_type}/average.{head}.h5",
         modisco_h5 = output_config["modisco_dir"] + "/{cell_type}/{head}_modisco.h5",
         modisco_html = output_config["modisco_dir"] + "/{cell_type}/modisco/{head}/motifs.html",
-        peaks_bed = output_config["shap_dir"] + "/{cell_type}/fold_0.interpreted_regions.bed" # config["union_peak"],
+        # peaks_bed = output_config["shap_dir"] + "/{cell_type}/fold_0.interpreted_regions.bed" # config["union_peak"],
     output:
         finemo_npz = output_config["hitcaller_dir"] + "/{cell_type}/{head}/regions.npz",
         finemo_hits = output_config["hitcaller_dir"] + "/{cell_type}/{head}/hits.tsv",
         finemo_bed = output_config["hitcaller_dir"] + "/{cell_type}/{head}/hits.bed.gz",
     params:
         finemo_out = output_config["hitcaller_dir"] + "/{cell_type}/{head}",
-        meta_file = config['motif_dir'] + "/metadata.tsv"
+        meta_file = config['motif_dir'] + "/metadata.tsv",
         alpha = config['alpha'],
+        peaks_bed = output_config["shap_dir"] + "/{cell_type}/fold_0.interpreted_regions.bed",
     conda:
         "finemo_gpu"
     resources:
@@ -21,8 +22,8 @@ rule hitcaller:
     shell:
         """
         finemo extract-regions-h5 --h5s {input.shap_h5} --out-path {output.finemo_npz} --region-width 1000
-        finemo call-hits --regions {output.finemo_npz} --modisco-h5 {input.modisco_h5} --peaks {input.peaks_bed} --alpha {params.alpha} --out-dir {params.finemo_out}
-        finemo report --hits {output.finemo_hits} --regions {output.finemo_npz} --modisco-h5 {input.modisco_h5} --peaks {input.peaks_bed} --out-dir {params.finemo_out}
+        finemo call-hits --regions {output.finemo_npz} --modisco-h5 {input.modisco_h5} --peaks {params.peaks_bed} --alpha {params.alpha} --out-dir {params.finemo_out}
+        finemo report --hits {output.finemo_hits} --regions {output.finemo_npz} --modisco-h5 {input.modisco_h5} --peaks {params.peaks_bed} --out-dir {params.finemo_out}
 
         if [[ -f "{params.finemo_out}/hits.bed" ]]; then 
             

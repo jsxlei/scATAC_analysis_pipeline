@@ -23,6 +23,10 @@ To apply to your computer, fill in the `config.yml` file with
 - out_dir
 - genome_dir
 
+## Note: 
+### Split fragments file if multi samples are stored in the same file
+```python scripts/utils.py --input_file fragments.tsv --out_dir frag_split```
+
 ### Genome dir
 Make genome dir in this structure:     
 genome_dir
@@ -48,6 +52,8 @@ genome_dir
         - fold_2.json
         - fold_3.json
         - fold_4.json
+
+
 # Start
 ** If on a PC or single node, -c $(nproc) is the number of cores you would like to use to run
 ```
