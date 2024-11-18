@@ -52,11 +52,11 @@ else:
 
 
 hits = pd.read_csv(args.bed, sep="\t") #, header=None)
-# hits.columns = ["chrom", "start", "end", "pattern", "score", "strand"]
+hits.columns = ["chr", "start", "end", "pattern", "score", "strand"]
 
-# hits['pattern'] = hits['pattern'].map(mapping_dict) #.apply(strip_motif_name)
-hits['pattern'] = hits['motif_name'].map(mapping_dict) #.apply(strip_motif_name)
-hits = hits[['chr', 'start', 'end', 'pattern', 'hit_coefficient', 'strand']]
+hits['pattern'] = hits['pattern'].map(mapping_dict) #.apply(strip_motif_name)
+# hits['pattern'] = hits['motif_name'].map(mapping_dict) #.apply(strip_motif_name)
+# hits = hits[['chr', 'start', 'end', 'pattern', 'hit_coefficient', 'strand']]
 # print(hits.head())
 
 hits.dropna(subset=['pattern'], inplace=True)
