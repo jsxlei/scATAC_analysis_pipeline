@@ -1,21 +1,27 @@
+####################################################################################
+# User customized configuration file for chrombpnet
+####################################################################################
+
 # Configuration for paths and parameters
 
 # Peak dir: peak_dir/{cell_type}{peak_suffix}, union_peak is a merged peak file over all peak files
-peak_dir: 
+peak_dir: #"inputs/3_peaks" e.g. /oak/stanford/groups/akundaje/leixiong/projects/macro_atlas/pancancer/output/inputs/3_peaks
 peak_suffix: #"_peaks_overlap_filtered.narrowPeak"  # Peak file suffix
-union_peak: # "union_peaks.narrowPeak"
+union_peak: # "union_peaks.narrowPeak" e.g. /oak/stanford/groups/akundaje/leixiong/projects/imac_igvf/results/2_chrombpnet/inputs/5_union_peak/union_peaks.narrowPeak
 
 # Input files either fragments or bam files:
 # input_dir: input_dir/{cell_type}{input_suffix}
-input_dir: 
-input_suffix:   # .bam
-format:  # bam
+input_dir: # inputs/2_celltype_fragments/fragments e.g. /oak/stanford/groups/akundaje/leixiong/projects/imac_igvf/results/2_chrombpnet/inputs/2_celltype_fragments/fragments
+input_suffix:   # _sorted.tsv / .bam
+format:  # frag / bam
 
-out_dir:
+out_dir: # "/oak/stanford/groups/akundaje/leixiong/projects/imac_igvf/results/2_chrombpnet/output"
 
 # Genome and motif directories
 genome_dir: "/oak/stanford/groups/akundaje/leixiong/genome"
 motif_dir: "/oak/stanford/groups/akundaje/leixiong/genome/motifs"
+
+####################################################################################
 
 # Genome configuration include bias for running chrombpnet
 genome_build: hg38

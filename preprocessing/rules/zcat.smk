@@ -8,5 +8,5 @@ rule zcat:
     shell:
         """
         echo {input} {output}
-        zcat {param.frag_dir}/{input} | grep -v '^#' | sed 's/-1\t/\t/g' > {output}
+        zcat {input} | grep -v '^#' | sed 's/-1\t/\t/g' > {output}
         """
