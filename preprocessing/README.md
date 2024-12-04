@@ -1,11 +1,10 @@
 # Preprocess ATAC fragment for Chrombpnet snakemake pipeline
 This is a snakemake pipeline. 
 
-![](overview_diagram.png)
 # Before Start
-## Installation
-create chrombpnet enviroment following https://github.com/kundajelab/chrombpnet
-create callpeak enviroment
+## Installation conda environments
+- create `chrombpnet` enviroment following https://github.com/kundajelab/chrombpnet   
+- create `callpeak` enviroment
 ```
 conda env create --file=envs/callpeak.yaml
 ```
@@ -23,35 +22,24 @@ To apply to your computer, fill in the `config.yml` file with
 - out_dir
 - genome_dir
 
-## Note: 
-### Split fragments file if multi samples are stored in the same file
-```python scripts/utils.py --input_file fragments.tsv --out_dir frag_split```
 
-### Genome dir
+## Note: 
+- Split fragments file if multi samples are stored in the same file
+```python scripts/utils.py --input_file fragments.tsv --out_dir frag_split```
+- Make sure remove -1 suffix in the barcode in both fragment files and barcode files
+- Make sure there is no `-` in celltype naming
+- Do not include / at the end of the path define for dir
+
+## Genome dir
 Make genome dir in this structure:     
 genome_dir
 - hg38
     - fasta: "hg38.fa"
     - chrom_sizes: "hg38.chrom.sizes" # This chrom size files needs sorted by 1,10,11,...2,20,..
-    - blacklist: "blacklist.bed.gz"
-    - bias: "bias.h5"
-    - chr_fold: "splits"
-        - fold_0.json
-        - fold_1.json
-        - fold_2.json
-        - fold_3.json
-        - fold_4.json
+
 - mm10
     - fasta: "mm10.fa"
     - chrom_sizes: "mm10.chrom.sizes" # # This chrom size files needs sorted by 1,10,11,...2,20,..
-    - blacklist: "mm10.blacklist2.bed" 
-    - bias: "bias.h5"
-    - chr_fold: "splits"
-        - fold_0.json
-        - fold_1.json
-        - fold_2.json
-        - fold_3.json
-        - fold_4.json
 
 
 # Start
@@ -64,6 +52,13 @@ snakemake -c 20 --profile profiles/local
 ```
 snakemake -j 30 --profile profiles/cls
 ```
+
+## Before you run
+Run a dry run with -np, e.g.
+```
+snakemake -c 20 --profile profiles/local
+```
+
 ## Output
 out_dir
 - 1_sample_fragments
@@ -85,6 +80,8 @@ out_dir
 - 5_union_peaks
     - union_peaks.narrowPeak
 
+## Overvie Diagram
+![](overview_diagram.png)
 
 # Acknowledgements
 Thanks Salil and Ryan for contributing the original preprocessing code.    

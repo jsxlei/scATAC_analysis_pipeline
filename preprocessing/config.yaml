@@ -22,14 +22,8 @@ genome:
   hg38:
     fasta: "hg38.fa"
     chrom_sizes: "hg38.chrom.sizes"
-    blacklist: "blacklist.bed.gz"
-    bias_model: "bias.h5"
-    chr_fold: "splits"
   mm10:
     fasta: "mm10.fa"
     chrom_sizes: "mm10.chrom.sizes"
-    blacklist: "mm10.blacklist2.bed"
-    bias_model: "bias.h5"
-    chr_fold: "splits"
 
 cell_types: 
