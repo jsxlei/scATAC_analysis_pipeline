@@ -22,8 +22,10 @@ genome:
   hg38:
     fasta: "hg38.fa"
     chrom_sizes: "hg38.chrom.sizes"
+    blacklist: "blacklist.bed.gz"
   mm10:
     fasta: "mm10.fa"
     chrom_sizes: "mm10.chrom.sizes"
+    blacklist: "mm10-blacklist.v2.bed.gz"
 
 cell_types: 

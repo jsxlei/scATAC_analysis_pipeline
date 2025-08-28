@@ -4,7 +4,7 @@ channels:
   - conda-forge
 
 dependencies:
-  - conda-forge::python>=3.8
+  - conda-forge::python=3.7
   - bioconda::ucsc-bedgraphtobigwig
   - bioconda::macs2
   - bioconda::bedtools

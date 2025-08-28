@@ -40,8 +40,10 @@ def generate_barcode_file(obs, out_dir):
     """
     Generate barcode files for each fragment and cell type
     """
+    obs = obs.copy()
     os.makedirs(out_dir, exist_ok=True)
-    obs.index = obs.index.str.split('-').str[0]
+    obs.index, obs['sample'] = obs.index.str.split('-').str[0], obs.index.str.split('-').str[1]
+    
     # obs = adata['rna'].obs
     for frag in np.unique(obs['sample']):
         print(frag)

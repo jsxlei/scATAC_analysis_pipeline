@@ -3,7 +3,7 @@
 rule train:
     input:
         input_file = config["input_dir"] + "/{cell_type}" + config['input_suffix'], 
-        peaks = config['union_peak'], 
+        peaks = config['union_peak'] if config['use_union_peaks'] else config["peak_dir"] + "/{cell_type}" + config["peak_suffix"],
         negatives = output_config["negative_dir"] + "/{fold}_negatives.bed", 
         bias_model = genome_config["bias_model"],
     output:

@@ -61,8 +61,9 @@ out:
   shap_dir: "shap"
   hitcaller_dir: "hitcaller"
 
-head: ['counts', 'profile']
+use_union_peaks: false
+head: ['counts'] #, 'profile']
 
-alpha: 0.7 # alpha for hitcaller
+alpha: 0.8 # alpha for hitcaller
 
 tmpdir: "/tmp"
