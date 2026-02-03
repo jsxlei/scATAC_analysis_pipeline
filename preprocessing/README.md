@@ -53,6 +53,11 @@ snakemake -c 20 --profile profiles/local
 snakemake -j 30 --profile profiles/cls
 ```
 
+** If with customized config.yaml file
+```
+snakemake -j 30 --profile profiles/cls --configfile config.yaml
+```
+
 ## Before you run
 Run a dry run with -np, e.g.
 ```

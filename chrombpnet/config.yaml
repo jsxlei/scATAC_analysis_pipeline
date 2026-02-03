@@ -60,6 +60,7 @@ out:
   modisco_dir: "modisco"
   shap_dir: "shap"
   hitcaller_dir: "hitcaller"
+  prediction_dir: "predictions"
 
 use_union_peaks: false
 head: ['counts'] #, 'profile']

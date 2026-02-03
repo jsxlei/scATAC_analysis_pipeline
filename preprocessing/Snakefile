@@ -60,7 +60,7 @@ include: "rules/union_peaks.smk"
 
 rule all:
     input:
-        list_input_fragment_files,
+        # list_input_fragment_files,
         list_sample_fragment_files,
         list_celltype_fragment_files,
         list_peak_files,

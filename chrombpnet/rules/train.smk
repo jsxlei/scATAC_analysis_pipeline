@@ -7,7 +7,8 @@ rule train:
         negatives = output_config["negative_dir"] + "/{fold}_negatives.bed", 
         bias_model = genome_config["bias_model"],
     output:
-        "{model_dir}/{cell_type}/{fold}/models/chrombpnet_nobias.h5"
+        chrombpnet_nobias = "{model_dir}/{cell_type}/{fold}/models/chrombpnet_nobias.h5",
+        full_model = "{model_dir}/{cell_type}/{fold}/models/chrombpnet.h5",
     params:
         model_dir = output_config["model_dir"],
         out_dir = output_config['model_dir'] + "/{cell_type}/{fold}",
@@ -23,7 +24,7 @@ rule train:
         "chrombpnet"
     shell:
         """
-        if [[ -f {output} ]]; then
+        if [[ -f {output.chrombpnet_nobias} ]]; then
             echo "Found model"
         else
             if [[ -d {params.out_dir} ]]; then

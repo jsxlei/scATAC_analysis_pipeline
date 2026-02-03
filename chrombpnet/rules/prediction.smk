@@ -4,16 +4,21 @@ rule prediction:
         full_models = expand(output_config["model_dir"] + "/{cell_type}/{fold}/models/chrombpnet.h5", cell_type=CELLTYPES, fold=config['fold']),
         peaks_file = config["union_peak"],
     output:
-        ""
+        pred_nobias = "{prediction_dir}/{cell_type}/pred_chrombpnet_nobias.bw",
+        pred = "{prediction_dir}/{cell_type}/pred_chrombpnet.bw"
     params:
         fasta = genome_config["fasta"],
         chrom_sizes = genome_config["chrom_sizes"],
+        prediction_dir = output_config["prediction_dir"],
+        output_prefix = output_config["prediction_dir"]+'/_pred',
+        script = workflow.basedir + 'scripts/predict_and_average.py',
     conda:
         "chrombpnet"
     threads: 16
+    
     shell:
         """
-        python scripts/predict_and_average.py \
+        python {params.script} \
             -r {input.peaks_file} \
             -g {params.fasta} \
             -c {params.chrom_sizes} \
@@ -21,7 +26,7 @@ rule prediction:
             -cm {input.nobias_models} \
             -suffix "nobias" \
 
-        python scripts/predict_and_average.py \
+        python {params.script} \
             -r {input.peaks_file} \
             -g {params.fasta} \
             -c {params.chrom_sizes} \

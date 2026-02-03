@@ -5,6 +5,7 @@ configfile: "config.yaml"
 
 
 import os
+
 genome_build = config["genome_build"]
 genome_config = {i: os.path.join(config['genome_dir'], genome_build, config["genome"][genome_build][i]) for i in config["genome"][genome_build]}
 output_config = {i: os.path.join(config['out_dir'], config["out"][i]) for i in config["out"]}
@@ -29,6 +30,7 @@ include: "rules/report_modisco.smk"
 include: "rules/hitcaller.smk"
 include: "rules/footprint.smk"
 include: "rules/make_datahub.smk"
+include: "rules/prediction.smk"
 
 
 # Union negatives
@@ -53,16 +55,20 @@ def list_modisco_motif(wildcards):
 def list_hitcaller(wildcards):
     return expand(output_config["hitcaller_dir"] + "/{cell_type}/{head}/hits.bed.gz", cell_type=CELLTYPES, head=config['head'])
 
+def list_predictions(wildcards):
+    return expand(output_config["prediction_dir"] + "/{cell_type}/pred_chrombpnet_nobias.bw", cell_type=CELLTYPES)
 
 
-shell.prefix("source scripts/env_setup.sh")
+
+shell.prefix("source {workflow.basedir}/scripts/env_setup.sh")
 
 rule all:
     input:
         list_shap,
         list_average_shap,
         list_modisco,
-        list_hitcaller
+        list_hitcaller,
+        list_predictions
 
 
 

@@ -13,6 +13,7 @@ rule hitcaller:
         meta_file = config['motif_dir'] + "/metadata.tsv",
         alpha = config['alpha'],
         peaks_bed = output_config["shap_dir"] + "/{cell_type}/fold_0.interpreted_regions.bed",
+        script = workflow.basedir + 'scripts/rename_motif.py'
     conda:
         "finemo_gpu"
     resources:
@@ -30,7 +31,7 @@ rule hitcaller:
             # bgzip and index hits
             module load biology samtools
 
-            python scripts/rename_motif.py --motif_html {input.modisco_html} --bed {params.finemo_out}/hits.bed --motif_meta {params.meta_file}
+            python {params.script} --motif_html {input.modisco_html} --bed {params.finemo_out}/hits.bed --motif_meta {params.meta_file}
             # bgzip -c {params.finemo_out}/hits.bed > {params.finemo_out}/hits.bed.gz
             # tabix -p bed {params.finemo_out}/hits.bed.gz
 

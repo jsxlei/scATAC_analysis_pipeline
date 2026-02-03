@@ -18,14 +18,14 @@ negatives:
 train:
   output: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.fold}.out"
   error: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.fold}.err"
-  partition: akundaje,owners,gpu
+  partition: akundaje
   gres: "--gres=gpu:1"
   mem: "{resources.mem_gb}G"
 
 shap:
   output: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.fold}_{wildcards.head}.out"
   error: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.fold}_{wildcards.head}.err"
-  partition: akundaje,owners,gpu
+  partition: akundaje
   gres: "--gres=gpu:1"
   mem: "{resources.mem_gb}G"
 
@@ -49,5 +49,7 @@ hitcaller:
   gres: "--gres=gpu:1"
   time: "02:00:00"
 
-generate_prediction:
+prediction:
   partition: akundaje,owners,normal
+  gres: "{resources.mem_gb}G"
+  time: "2-0"

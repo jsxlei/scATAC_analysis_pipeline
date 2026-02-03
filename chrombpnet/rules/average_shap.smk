@@ -9,6 +9,7 @@ rule average_shap:
         base_dir = output_config['shap_dir'] + "/{cell_type}",
         chrom_sizes = genome_config["chrom_sizes"],
         output_prefix = output_config["shap_dir"] + "/{cell_type}/average.{head}",
+        script = workflow.basedir + 'scripts/average_shap.py'
     conda:
         "chrombpnet"
     resources:
@@ -19,7 +20,7 @@ rule average_shap:
         if [[ -f {output.h5} ]]; then
             echo "Found h5 files"
         else
-            python scripts/average_shap.py \
+            python {params.script} \
                 --shaptype {wildcards.head} \
                 --base_dir {params.base_dir} \
                 --folds {params.folds}

@@ -34,13 +34,15 @@ callpeak () {
 	npeaks=300000
 
 	echo "${dataset} getting top peaks..."
-        sort -k 8gr,8gr ${p1_in} | head -n ${npeaks} | sort -k 1,1 -k2,2n > ${p1_out}
-        sort -k 8gr,8gr ${p2_in} | head -n ${npeaks} | sort -k 1,1 -k2,2n > ${p2_out}
-        sort -k 8gr,8gr ${pT_in} | head -n ${npeaks} | sort -k 1,1 -k2,2n > ${pT_out}
+        # sort -k 8gr,8gr ${p1_in} | head -n ${npeaks} | sort -k 1,1 -k2,2n > ${p1_out}
+        # sort -k 8gr,8gr ${p2_in} | head -n ${npeaks} | sort -k 1,1 -k2,2n > ${p2_out}
+        # sort -k 8gr,8gr ${pT_in} | head -n ${npeaks} | sort -k 1,1 -k2,2n > ${pT_out}
+	sort -k 8gr,8gr ${p1_in} | head -n ${npeaks} | bedtools sort -i stdin -g ${chr_order} > ${p1_out}
+	sort -k 8gr,8gr ${p2_in} | head -n ${npeaks} | bedtools sort -i stdin -g ${chr_order} > ${p2_out}
+	sort -k 8gr,8gr ${pT_in} | head -n ${npeaks} | bedtools sort -i stdin -g ${chr_order} > ${pT_out}
 
 	echo "${dataset} intersecting peaks"
         min_overlap=0.5
-	# chr_order=$4 #"/mnt/lab_data3/salil512/adult_heart/0_raw_data/other/GRCh38_EBV_sorted_standard.chrom.sizes.tsv"
         overlap_output=${out_dir}/${dataset}_peaks_overlap.narrowPeak
         bedtools intersect -u -a ${pT_out} -b ${p1_out} -g ${chr_order} -f ${min_overlap} -F ${min_overlap} -e -sorted | bedtools intersect -u -a stdin -b ${p2_out} -g ${chr_order} -f ${min_overlap} -F ${min_overlap} -e -sorted > ${overlap_output}
 
@@ -49,7 +51,6 @@ callpeak () {
         filtered_output=${out_dir}/${dataset}_peaks_overlap_filtered.narrowPeak
         bedtools intersect -v -a ${overlap_output} -b ${blacklist} > ${filtered_output}
 
-	# chr_order= #"/mnt/lab_data3/salil512/adult_heart/0_raw_data/other/GRCh38_EBV_sorted_standard.chrom.sizes.tsv"
 	echo "${dataset} making p-value bedgraphs"
 	macs2 bdgcmp -m ppois -t ${out_dir}/${dataset}_pseudoreplicate1_treat_pileup.bdg -c ${out_dir}/${dataset}_pseudoreplicate1_control_lambda.bdg -o ${out_dir}/${dataset}_pseudoreplicate1_ppois.bdg & macs2 bdgcmp -m ppois -t ${out_dir}/${dataset}_pseudoreplicate2_treat_pileup.bdg -c ${out_dir}/${dataset}_pseudoreplicate2_control_lambda.bdg -o ${out_dir}/${dataset}_pseudoreplicate2_ppois.bdg & macs2 bdgcmp -m ppois -t ${out_dir}/${dataset}_pseudoreplicateT_treat_pileup.bdg -c ${out_dir}/${dataset}_pseudoreplicateT_control_lambda.bdg -o ${out_dir}/${dataset}_pseudoreplicateT_ppois.bdg
 	echo "${dataset} combining p-value bedgraphs"
@@ -59,6 +60,15 @@ callpeak () {
 	bedGraphToBigWig ${out_dir}/${dataset}_combined_ppois_sorted.bdg ${chr_order} ${out_dir}/${dataset}_pval.bw
 
 	echo "${dataset} completed!"
+
+	rm ${out_dir}/${dataset}_pseudoreplicate1_peaks.narrowPeak
+	rm ${out_dir}/${dataset}_pseudoreplicate2_peaks.narrowPeak
+	rm ${out_dir}/${dataset}_pseudoreplicateT_peaks.narrowPeak
+	rm ${out_dir}/${dataset}_pseudoreplicate1_ppois.bdg
+	rm ${out_dir}/${dataset}_pseudoreplicate2_ppois.bdg
+	rm ${out_dir}/${dataset}_pseudoreplicateT_ppois.bdg
+	rm ${out_dir}/${dataset}_combined_ppois.bdg
+	rm ${out_dir}/${dataset}_combined_ppois_sorted.bdg
 
 }
 export -f callpeak
