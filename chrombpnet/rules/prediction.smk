@@ -1,20 +1,23 @@
 rule prediction:
     input:
-        nobias_models = expand(output_config["model_dir"] + "/{cell_type}/{fold}/models/chrombpnet_nobias.h5", cell_type=CELLTYPES, fold=config['fold']),
-        full_models = expand(output_config["model_dir"] + "/{cell_type}/{fold}/models/chrombpnet.h5", cell_type=CELLTYPES, fold=config['fold']),
+        nobias_models = expand(output_config["model_dir"] + "/{{cell_type}}/{fold}/models/chrombpnet_nobias.h5", fold=config['fold']),
+        full_models = expand(output_config["model_dir"] + "/{{cell_type}}/{fold}/models/chrombpnet.h5", fold=config['fold']),
         peaks_file = config["union_peak"],
     output:
-        pred_nobias = "{prediction_dir}/{cell_type}/pred_chrombpnet_nobias.bw",
-        pred = "{prediction_dir}/{cell_type}/pred_chrombpnet.bw"
+        pred_nobias = output_config["prediction_dir"] + "/{cell_type}/pred_chrombpnet_nobias.bw",
+        pred = output_config["prediction_dir"] + "/{cell_type}/pred_chrombpnet.bw"
     params:
         fasta = genome_config["fasta"],
         chrom_sizes = genome_config["chrom_sizes"],
         prediction_dir = output_config["prediction_dir"],
-        output_prefix = output_config["prediction_dir"]+'/_pred',
-        script = workflow.basedir + 'scripts/predict_and_average.py',
+        output_prefix = output_config["prediction_dir"]+'/{cell_type}/_pred',
+        script = workflow.basedir + '/scripts/predict_and_average.py',
     conda:
         "chrombpnet"
     threads: 16
+    resources:
+        gpu=1,
+        mem_gb=50, 
     
     shell:
         """

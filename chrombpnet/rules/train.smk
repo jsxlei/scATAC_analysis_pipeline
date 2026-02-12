@@ -43,5 +43,7 @@ rule train:
                 -c {params.chrom_sizes} \
                 -fl {params.chr_fold}/{wildcards.fold}.json \
                 -d "ATAC" 
+            echo "rm -r {params.out_dir}/auxiliary"
+            rm -r {params.out_dir}/auxiliary
         fi
         """

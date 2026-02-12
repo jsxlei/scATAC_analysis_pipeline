@@ -28,7 +28,6 @@ include: "rules/h5_to_bw.smk"
 include: "rules/modisco.smk"
 include: "rules/report_modisco.smk"
 include: "rules/hitcaller.smk"
-include: "rules/footprint.smk"
 include: "rules/make_datahub.smk"
 include: "rules/prediction.smk"
 
@@ -68,7 +67,7 @@ rule all:
         list_average_shap,
         list_modisco,
         list_hitcaller,
-        list_predictions
+        # list_predictions
 
 
 

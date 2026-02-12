@@ -13,7 +13,7 @@ rule hitcaller:
         meta_file = config['motif_dir'] + "/metadata.tsv",
         alpha = config['alpha'],
         peaks_bed = output_config["shap_dir"] + "/{cell_type}/fold_0.interpreted_regions.bed",
-        script = workflow.basedir + 'scripts/rename_motif.py'
+        script = workflow.basedir + '/scripts/rename_motif.py'
     conda:
         "finemo_gpu"
     resources:

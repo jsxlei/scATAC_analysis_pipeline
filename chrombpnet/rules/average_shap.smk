@@ -9,7 +9,7 @@ rule average_shap:
         base_dir = output_config['shap_dir'] + "/{cell_type}",
         chrom_sizes = genome_config["chrom_sizes"],
         output_prefix = output_config["shap_dir"] + "/{cell_type}/average.{head}",
-        script = workflow.basedir + 'scripts/average_shap.py'
+        script = workflow.basedir + '/scripts/average_shap.py'
     conda:
         "chrombpnet"
     resources:
@@ -25,4 +25,10 @@ rule average_shap:
                 --base_dir {params.base_dir} \
                 --folds {params.folds}
         fi
+
+        # Remove fold-specific bigwig and h5 shap files
+        for fold in {params.folds}; do
+            rm -f {params.base_dir}/${{fold}}.{wildcards.head}_scores.bw
+            rm -f {params.base_dir}/${{fold}}.{wildcards.head}_scores.h5
+        done
         """

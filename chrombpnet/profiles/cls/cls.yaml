@@ -50,6 +50,9 @@ hitcaller:
   time: "02:00:00"
 
 prediction:
+  output: ".slurm/{rule}/{wildcards.cell_type}.out"
+  error: ".slurm/{rule}/{wildcards.cell_type}.err"
   partition: akundaje,owners,normal
-  gres: "{resources.mem_gb}G"
+  gres: "--gres=gpu:1"
+  mem: "{resources.mem_gb}G"
   time: "2-0"
