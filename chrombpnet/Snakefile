@@ -67,7 +67,7 @@ rule all:
         list_average_shap,
         list_modisco,
         list_hitcaller,
-        # list_predictions
+        list_predictions
 
 
 
