@@ -102,7 +102,7 @@ def main(args):
         outputlen = int(model.output_shape[0][1])
 
         inputlens.append(inputlen)
-        outputlens.append(outputlens)
+        outputlens.append(outputlen)
         assert all(elem == inputlens[0] for elem in inputlens)
         assert all(elem == outputlens[0] for elem in outputlens) # Make sure that all models have the same input and output size
 
@@ -125,7 +125,7 @@ def main(args):
 
             if args.debug_chr is not None:
                 regions_df = regions_df[regions_df['chr'].isin(args.debug_chr)]
-                regions = [x for x in regions if x[0]==args.debug_chr]
+                regions = [x for x in regions if x[0] in args.debug_chr]
             regions_df[regions_used].to_csv(args.output_prefix + f"_chrombpnet{args.suffix}_preds.bed", sep="\t", header=False, index=False)
 
             initialized_data = True

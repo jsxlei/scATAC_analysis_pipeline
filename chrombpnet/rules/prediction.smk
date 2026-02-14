@@ -27,7 +27,7 @@ rule prediction:
             -c {params.chrom_sizes} \
             -op {params.output_prefix} \
             -cm {input.nobias_models} \
-            -suffix "nobias" \
+            -sfx "nobias" \
 
         python {params.script} \
             -r {input.peaks_file} \
@@ -35,5 +35,5 @@ rule prediction:
             -c {params.chrom_sizes} \
             -op {params.output_prefix} \
             -cm {input.full_models} \
-            -suffix "full" \
+            -sfx "full" \
         """
