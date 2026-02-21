@@ -60,6 +60,28 @@ All the results will be saved under the out_dir your define in the config.yaml f
 - negatives
 - models
 - shap
+- report (`report/summary.md`, `report/summary.json`, TSV stats)
+- status (`status/status.json`, `status/status.md`)
+
+## Live Status Website
+Run the status dashboard while pipeline is running:
+```bash
+python scripts/status_server.py \
+  --out-dir <out_dir> \
+  --snakemake-dir .snakemake \
+  --host 0.0.0.0 \
+  --port 8787 \
+  --refresh-seconds 30 \
+  --final-status-json <out_dir>/status/status.json
+```
+Then open `http://<host>:8787`.
+
+## Email Notification
+Configure `email` in `config.yaml` and set SMTP password via env var:
+```bash
+export CHROMBPNET_SMTP_PASSWORD='<password>'
+```
+Snakemake will send one email on success or failure based on `email.on`.
 
 ## Log
 - slurm log scATAC_analysis_pipeline/chrombpnet/.slurm

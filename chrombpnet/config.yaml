@@ -15,6 +15,18 @@ input_dir: # inputs/2_celltype_fragments/fragments e.g. /oak/stanford/groups/aku
 input_suffix:   # _sorted.tsv / .bam
 format:  # frag / bam
 
+# Optional overrides for selecting cell types (priority: cell_type > cell_types > cell_types_file > auto-discover).
+# cell_type: 'Bcell'  # single cell type (also supports CLI: --config cell_type=Bcell)
+# cell_types: ['Bcell', 'Tcell']  # explicit ordered list (also supports comma string: "Bcell,Tcell")
+# cell_types_file: "/path/to/cell_types.txt"  # one cell type per line (or whitespace-separated), preserves order
+# cell_type_index: 0 or [0, 2]  # index/indices into the resolved list above
+# cell_type_index_file: "/path/to/cell_type_index.txt"  # index values from file, one per line or whitespace-separated
+cell_type:
+cell_types:
+cell_types_file:
+cell_type_index:
+cell_type_index_file:
+
 out_dir: # "/oak/stanford/groups/akundaje/leixiong/projects/imac_igvf/results/2_chrombpnet/output"
 
 # Genome and motif directories
@@ -61,10 +73,32 @@ out:
   shap_dir: "shap"
   hitcaller_dir: "hitcaller"
   prediction_dir: "predictions"
+  report_dir: "report"
+  status_dir: "status"
 
+status_dashboard:
+  enabled: true
+  host: "0.0.0.0"
+  port: 8787
+  refresh_seconds: 30
+
+# `use_union_peak` takes precedence if set; otherwise `use_union_peaks` is used.
+use_union_peak: false
 use_union_peaks: false
 head: ['counts'] #, 'profile']
 
 alpha: 0.8 # alpha for hitcaller
+
+email:
+  enabled: false
+  on: "success_and_failure"  # success_and_failure / success_only / failure_only
+  smtp_host: ""
+  smtp_port: 587
+  smtp_starttls: true
+  smtp_username: ""
+  smtp_password_env: "CHROMBPNET_SMTP_PASSWORD"
+  from_email: ""
+  to_emails: []
+  subject_prefix: "[ChromBPNet]"
 
 tmpdir: "/tmp"

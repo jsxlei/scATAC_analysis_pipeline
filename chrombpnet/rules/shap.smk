@@ -1,12 +1,17 @@
 import pandas as pd
-n_peaks = pd.read_csv(config['union_peak'], sep='\t').shape[0]
-mem_gb = n_peaks / 5000
-threads = max(4, int(n_peaks / 25000))
+
+
+def _count_peaks(path):
+    return pd.read_csv(path, sep="\t").shape[0]
+
+
+def _shap_mem_gb(wildcards, input, attempt):
+    return _count_peaks(input.peaks_file) / 5000
 
 rule shap:
     input:
         model = output_config["model_dir"] + "/{cell_type}/{fold}/models/chrombpnet_nobias.h5",
-        union_peak = config["union_peak"],
+        peaks_file = config["union_peak"] if USE_UNION_PEAKS else config["peak_dir"] + "/{cell_type}" + config["peak_suffix"],
     output: 
         shap_bw = output_config["shap_dir"] + "/{cell_type}/{fold}.{head}_scores.bw",
         shap_h5 = output_config["shap_dir"] + "/{cell_type}/{fold}.{head}_scores.h5",
@@ -18,7 +23,7 @@ rule shap:
         
     resources:
         nvidia_gpu=1,
-        mem_gb=lambda wildcards, attempt: mem_gb,  # Adjust memory based on number of samples
+        mem_gb=_shap_mem_gb,
     conda:
         "chrombpnet"
     threads: 2
@@ -32,7 +37,7 @@ rule shap:
             echo "Generate {wildcards.head} contribution score bigwigs"
             chrombpnet contribs_bw \
                 -m {input.model} \
-                -r {input.union_peak} \
+                -r {input.peaks_file} \
                 -g {params.fasta} \
                 -c {params.chrom_sizes} \
                 -op {params.output_prefix} \

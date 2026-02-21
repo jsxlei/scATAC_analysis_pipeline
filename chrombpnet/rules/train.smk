@@ -3,8 +3,8 @@
 rule train:
     input:
         input_file = config["input_dir"] + "/{cell_type}" + config['input_suffix'], 
-        peaks = config['union_peak'] if config['use_union_peaks'] else config["peak_dir"] + "/{cell_type}" + config["peak_suffix"],
-        negatives = output_config["negative_dir"] + "/{fold}_negatives.bed", 
+        peaks = config['union_peak'] if USE_UNION_PEAKS else config["peak_dir"] + "/{cell_type}" + config["peak_suffix"],
+        negatives = output_config["negative_dir"] + "/{cell_type}/{fold}_negatives.bed", 
         bias_model = genome_config["bias_model"],
     output:
         chrombpnet_nobias = "{model_dir}/{cell_type}/{fold}/models/chrombpnet_nobias.h5",

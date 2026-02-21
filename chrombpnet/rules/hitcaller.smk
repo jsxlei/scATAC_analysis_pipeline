@@ -12,7 +12,7 @@ rule hitcaller:
         finemo_out = output_config["hitcaller_dir"] + "/{cell_type}/{head}",
         meta_file = config['motif_dir'] + "/metadata.tsv",
         alpha = config['alpha'],
-        peaks_bed = output_config["shap_dir"] + "/{cell_type}/fold_0.interpreted_regions.bed",
+        peaks_bed = config["union_peak"] if USE_UNION_PEAKS else config["peak_dir"] + "/{cell_type}" + config["peak_suffix"],
         script = workflow.basedir + '/scripts/rename_motif.py'
     conda:
         "finemo_gpu"
