@@ -38,8 +38,10 @@ def list_sample_fragment_files(wildcards):
     return output
 
 def list_celltype_fragment_files(wildcards):
-    output = expand(celltype_frag_dir + "/{subfolder}/{cell_type}_sorted.tsv", subfolder=SUBFOLDS, cell_type=CELLTYPES)
-    return output
+    return expand(
+        celltype_frag_dir + "/{subfolder}/" + wildcards.cell_type + "_sorted.tsv",
+        subfolder=SUBFOLDS
+    )
 
 def list_peak_files(wildcards):
     output = expand(peak_dir+"/{cell_type}"+config["peak_suffix"], cell_type=CELLTYPES)
@@ -66,5 +68,4 @@ rule all:
         list_peak_files,
         list_bigwig_files, 
         union_peaks
-
 

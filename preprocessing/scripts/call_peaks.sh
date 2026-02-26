@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 
 callpeak () {
@@ -52,7 +53,23 @@ callpeak () {
         bedtools intersect -v -a ${overlap_output} -b ${blacklist} > ${filtered_output}
 
 	echo "${dataset} making p-value bedgraphs"
-	macs2 bdgcmp -m ppois -t ${out_dir}/${dataset}_pseudoreplicate1_treat_pileup.bdg -c ${out_dir}/${dataset}_pseudoreplicate1_control_lambda.bdg -o ${out_dir}/${dataset}_pseudoreplicate1_ppois.bdg & macs2 bdgcmp -m ppois -t ${out_dir}/${dataset}_pseudoreplicate2_treat_pileup.bdg -c ${out_dir}/${dataset}_pseudoreplicate2_control_lambda.bdg -o ${out_dir}/${dataset}_pseudoreplicate2_ppois.bdg & macs2 bdgcmp -m ppois -t ${out_dir}/${dataset}_pseudoreplicateT_treat_pileup.bdg -c ${out_dir}/${dataset}_pseudoreplicateT_control_lambda.bdg -o ${out_dir}/${dataset}_pseudoreplicateT_ppois.bdg
+	macs2 bdgcmp -m ppois \
+		-t ${out_dir}/${dataset}_pseudoreplicate1_treat_pileup.bdg \
+		-c ${out_dir}/${dataset}_pseudoreplicate1_control_lambda.bdg \
+		-o ${out_dir}/${dataset}_pseudoreplicate1_ppois.bdg &
+	pid1=$!
+	macs2 bdgcmp -m ppois \
+		-t ${out_dir}/${dataset}_pseudoreplicate2_treat_pileup.bdg \
+		-c ${out_dir}/${dataset}_pseudoreplicate2_control_lambda.bdg \
+		-o ${out_dir}/${dataset}_pseudoreplicate2_ppois.bdg &
+	pid2=$!
+	macs2 bdgcmp -m ppois \
+		-t ${out_dir}/${dataset}_pseudoreplicateT_treat_pileup.bdg \
+		-c ${out_dir}/${dataset}_pseudoreplicateT_control_lambda.bdg \
+		-o ${out_dir}/${dataset}_pseudoreplicateT_ppois.bdg &
+	pid3=$!
+	wait ${pid1} ${pid2} ${pid3}
+
 	echo "${dataset} combining p-value bedgraphs"
 	macs2 cmbreps -m fisher -i ${out_dir}/${dataset}_pseudoreplicate1_ppois.bdg ${out_dir}/${dataset}_pseudoreplicate2_ppois.bdg ${out_dir}/${dataset}_pseudoreplicateT_ppois.bdg -o ${out_dir}/${dataset}_combined_ppois.bdg
 	sort -k1,1 -k2,2n -S 10% ${out_dir}/${dataset}_combined_ppois.bdg | head -n -1 > ${out_dir}/${dataset}_combined_ppois_sorted.bdg
@@ -69,6 +86,10 @@ callpeak () {
 	rm ${out_dir}/${dataset}_pseudoreplicateT_ppois.bdg
 	rm ${out_dir}/${dataset}_combined_ppois.bdg
 	rm ${out_dir}/${dataset}_combined_ppois_sorted.bdg
+	rm ${out_dir}/$log_${dataset}_pseudorep1.txt
+	rm ${out_dir}/$log_${dataset}_pseudorep2.txt
+	rm ${out_dir}/$log_${dataset}_pseudorepT.txt
+	rm ${out_dir}/${dataset}_pseudoreplicate*
 
 }
 export -f callpeak
