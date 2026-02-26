@@ -78,19 +78,6 @@ callpeak () {
 
 	echo "${dataset} completed!"
 
-	rm ${out_dir}/${dataset}_pseudoreplicate1_peaks.narrowPeak
-	rm ${out_dir}/${dataset}_pseudoreplicate2_peaks.narrowPeak
-	rm ${out_dir}/${dataset}_pseudoreplicateT_peaks.narrowPeak
-	rm ${out_dir}/${dataset}_pseudoreplicate1_ppois.bdg
-	rm ${out_dir}/${dataset}_pseudoreplicate2_ppois.bdg
-	rm ${out_dir}/${dataset}_pseudoreplicateT_ppois.bdg
-	rm ${out_dir}/${dataset}_combined_ppois.bdg
-	rm ${out_dir}/${dataset}_combined_ppois_sorted.bdg
-	rm ${out_dir}/$log_${dataset}_pseudorep1.txt
-	rm ${out_dir}/$log_${dataset}_pseudorep2.txt
-	rm ${out_dir}/$log_${dataset}_pseudorepT.txt
-	rm ${out_dir}/${dataset}_pseudoreplicate*
-
 }
 export -f callpeak
 
