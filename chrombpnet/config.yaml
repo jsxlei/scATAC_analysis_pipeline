@@ -73,8 +73,6 @@ out:
   shap_dir: "shap"
   hitcaller_dir: "hitcaller"
   prediction_dir: "predictions"
-  report_dir: "report"
-  status_dir: "status"
 
 status_dashboard:
   enabled: true

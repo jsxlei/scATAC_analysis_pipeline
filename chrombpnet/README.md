@@ -60,8 +60,6 @@ All the results will be saved under the out_dir your define in the config.yaml f
 - negatives
 - models
 - shap
-- report (`report/summary.md`, `report/summary.json`, TSV stats)
-- status (`status/status.json`, `status/status.md`)
 
 ## Live Status Website
 Run the status dashboard while pipeline is running:
@@ -71,8 +69,7 @@ python scripts/status_server.py \
   --snakemake-dir .snakemake \
   --host 0.0.0.0 \
   --port 8787 \
-  --refresh-seconds 30 \
-  --final-status-json <out_dir>/status/status.json
+  --refresh-seconds 30
 ```
 Then open `http://<host>:8787`.
 

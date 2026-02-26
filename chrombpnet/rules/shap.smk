@@ -6,7 +6,7 @@ def _count_peaks(path):
 
 
 def _shap_mem_gb(wildcards, input, attempt):
-    return _count_peaks(input.peaks_file) / 5000
+    return max(_count_peaks(input.peaks_file) / 5000, 60)
 
 rule shap:
     input:

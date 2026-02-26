@@ -10,19 +10,21 @@ Discovers cell types from the bigwig input directory and generates tracks for:
 
 Usage:
     python scripts/make_datahub.py \
-        --path /oak/stanford/groups/akundaje/leixiong/projects/<project>/results/2_chrombpnet
+        --path /users/leixiong/projects/<project>/results/2_chrombpnet
 
     python scripts/make_datahub.py \
         --path /oak/stanford/groups/akundaje/leixiong/projects/<project>/results/2_chrombpnet \
         --outdir /custom/output \
         --heads counts \
-        --peak_suffix _peaks.narrowPeak
+        --peak_suffix _peaks.narrowPeak \
+        --cell_type_index cell_types.txt
 
 Arguments:
-    --path          Path to the pipeline results directory (required)
-    --outdir        Output directory for datahub.json (default: {path}/datahub/)
-    --peak_suffix   Peak file suffix (default: _peaks_overlap_filtered.narrowPeak)
-    --heads         SHAP/hitcaller heads to include (default: counts profile)
+    --path              Path to the pipeline results directory (required)
+    --outdir            Output directory for datahub.json (default: {path}/datahub/)
+    --peak_suffix       Peak file suffix (default: _peaks_overlap_filtered.narrowPeak)
+    --heads             SHAP/hitcaller heads to include (default: counts profile)
+    --cell_type_index   File with one cell type per line defining the output order
 
 Expected directory structure under --path:
     inputs/
@@ -48,13 +50,29 @@ parser.add_argument('--peak_suffix', type=str, default='_peaks_overlap_filtered.
                     help='Peak file suffix')
 parser.add_argument('--heads', type=str, nargs='+', default=['counts'], #, 'profile'],
                     help='SHAP/hitcaller heads to include')
+parser.add_argument('--cell_type_index', type=str, default=None,
+                    help='File with one cell type per line defining the output order')
 
 args = parser.parse_args()
 
 bigwig_path = os.path.join(args.path, 'inputs', '4_bigwig')
 
-# List of names
-names = sorted([i.replace('_unstranded.bw', '') for i in os.listdir(bigwig_path)])
+# List of names — ordered by cell_type_index if provided, else sorted
+discovered = set(i.replace('_unstranded.bw', '') for i in os.listdir(bigwig_path))
+
+if args.cell_type_index:
+    with open(args.cell_type_index) as f:
+        ordered = [line.strip() for line in f if line.strip()]
+    # Only keep index entries that actually exist in the bigwig directory
+    ordered_valid = [n for n in ordered if n in discovered]
+    missing = [n for n in ordered if n not in discovered]
+    if missing:
+        print(f"Warning: {len(missing)} name(s) in cell_type_index not found in bigwig dir: {missing}")
+    # Append any discovered names not listed in the index at the end
+    names = ordered_valid + sorted(discovered - set(ordered_valid))
+else:
+    names = sorted(discovered)
+
 url = "https://mitra.stanford.edu/kundaje/oak/leixiong/"
 url_path = url + args.path.replace('/users/leixiong', '')
 
@@ -89,105 +107,95 @@ for name in names:
         print(f"tabix: {peak_gz}")
         subprocess.run(["tabix", "-p", "bed", peak_gz], check=True)
 
-# Generate browser tracks in WashU data hub format
-tracks = []
 
-for name in names:
-    # Training data bigwig
-    tracks.append({
+def make_cluster_tracks(name):
+    """Return the list of track dicts for a single cluster."""
+    cluster_tracks = []
+
+    cluster_tracks.append({
         "type": "bigwig",
         "url": bigwig_url.format(name=name),
         "name": f"{name} Training",
         "showOnHubLoad": False,
-        "options": {
-            "aggregateMethod": "MAX",
-            "color": "black",
-        },
-        "metadata": {
-            "cluster": name,
-            "content": "training_bw",
-        },
+        "options": {"aggregateMethod": "MAX", "color": "black"},
+        "metadata": {"cluster": name, "content": "training_bw"},
     })
 
-    # Peaks
-    tracks.append({
+    cluster_tracks.append({
         "type": "bed",
         "url": peaks_url.format(name=name, peak_suffix=args.peak_suffix),
         "name": f"{name} Peaks",
         "showOnHubLoad": False,
-        "options": {
-            "aggregateMethod": "MAX",
-        },
-        "metadata": {
-            "cluster": name,
-            "content": "peaks",
-        },
+        "options": {"aggregateMethod": "MAX"},
+        "metadata": {"cluster": name, "content": "peaks"},
     })
 
-    # Chrombpnet predictions (no bias)
-    tracks.append({
+    cluster_tracks.append({
         "type": "bigwig",
         "url": prediction_nobias_url.format(name=name),
         "name": f"{name} Chrombpnet Predictions",
         "showOnHubLoad": False,
-        "options": {
-            "aggregateMethod": "MAX",
-        },
-        "metadata": {
-            "cluster": name,
-            "content": "predictions",
-        },
+        "options": {"aggregateMethod": "MAX"},
+        "metadata": {"cluster": name, "content": "predictions"},
     })
 
-    # Chrombpnet predictions (bias-included)
-    tracks.append({
+    cluster_tracks.append({
         "type": "bigwig",
         "url": prediction_full_url.format(name=name),
         "name": f"{name} Bias-Included Chrombpnet Predictions",
         "showOnHubLoad": False,
-        "options": {
-            "aggregateMethod": "MAX",
-        },
-        "metadata": {
-            "cluster": name,
-            "content": "predictions_withbias",
-        },
+        "options": {"aggregateMethod": "MAX"},
+        "metadata": {"cluster": name, "content": "predictions_withbias"},
     })
 
-    # SHAP and hitcaller tracks for each head
     for head in args.heads:
-        # SHAP contribution scores
-        tracks.append({
+        cluster_tracks.append({
             "type": "dynseq",
             "url": shap_url.format(name=name, head=head),
             "name": f"{name} {head.capitalize()} DeepSHAPs",
             "showOnHubLoad": False,
-            "options": {
-                "aggregateMethod": "MAX",
-            },
-            "metadata": {
-                "cluster": name,
-                "content": f"{head}_shap",
-            },
+            "options": {"aggregateMethod": "MAX"},
+            "metadata": {"cluster": name, "content": f"{head}_shap"},
         })
 
-        # Motif hit calls
-        tracks.append({
+        cluster_tracks.append({
             "type": "bed",
             "url": hits_url.format(name=name, head=head),
             "name": f"{name} {head.capitalize()} Motif Hit Calls",
             "showOnHubLoad": False,
-            "options": {
-                "aggregateMethod": "MAX",
-                "alwaysDrawLabel": True,
-            },
-            "metadata": {
-                "cluster": name,
-                "content": f"{head}_hits",
-            },
+            "options": {"aggregateMethod": "MAX", "alwaysDrawLabel": True},
+            "metadata": {"cluster": name, "content": f"{head}_hits"},
         })
 
-# Save datahub to a single JSON file
+    return cluster_tracks
+
+
+def tracks_to_txt(content_tracks, txt_path):
+    """Write one URL per line for a list of track dicts."""
+    with open(txt_path, "w") as f:
+        for t in content_tracks:
+            f.write(t["url"] + "\n")
+
+
+# Generate browser tracks in WashU data hub format
+# tracks_by_content: content_key -> list of tracks (one per cell type, in names order)
+tracks = []
+tracks_by_content = {}
+
+for name in names:
+    for t in make_cluster_tracks(name):
+        tracks.append(t)
+        content = t["metadata"]["content"]
+        tracks_by_content.setdefault(content, []).append(t)
+
+# Save combined datahub to a single JSON file
 datahub_file = os.path.join(args.outdir, 'datahub.json')
 with open(datahub_file, "w") as f:
     json.dump(tracks, f, indent=4)
+print(f"Saved combined: {datahub_file}")
+
+# Save one TXT per track type (content), all cell types together in names order
+for content, content_tracks in tracks_by_content.items():
+    txt_path = os.path.join(args.outdir, f"{content}.txt")
+    tracks_to_txt(content_tracks, txt_path)
+    print(f"Saved {content}: {txt_path}")

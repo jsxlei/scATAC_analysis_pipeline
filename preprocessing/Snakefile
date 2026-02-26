@@ -49,7 +49,7 @@ def list_bigwig_files(wildcards):
     output = expand(bigwig_dir + "/{cell_type}_unstranded.bw", cell_type=CELLTYPES)
     return output
 
-shell.prefix("source scripts/env_setup.sh")
+shell.prefix("source " + workflow.basedir + "/scripts/env_setup.sh")
 
 include: "rules/zcat.smk"
 include: "rules/extract_sample_fragments.smk"
@@ -61,11 +61,10 @@ include: "rules/union_peaks.smk"
 rule all:
     input:
         # list_input_fragment_files,
-        list_sample_fragment_files,
-        list_celltype_fragment_files,
+        # list_sample_fragment_files,
+        # list_celltype_fragment_files,
         list_peak_files,
         list_bigwig_files, 
         union_peaks
-
 
 

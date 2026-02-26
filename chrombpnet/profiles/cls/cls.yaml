@@ -11,8 +11,8 @@ __default__:
   mem: "30G"
 
 negatives:
-  output: ".slurm/{rule}/{wildcards.fold}.out"
-  error: ".slurm/{rule}/{wildcards.fold}.err"
+  output: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.fold}.out"
+  error: ".slurm/{rule}/{wildcards.cell_type}_{wildcards.fold}.err"
   partition: akundaje,owners,normal
 
 train:

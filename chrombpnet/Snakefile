@@ -22,8 +22,6 @@ DEFAULT_OUT_SUBDIRS = {
     "shap_dir": "shap",
     "hitcaller_dir": "hitcaller",
     "prediction_dir": "predictions",
-    "report_dir": "report",
-    "status_dir": "status",
 }
 for _key, _subdir in DEFAULT_OUT_SUBDIRS.items():
     output_config.setdefault(_key, os.path.join(config["out_dir"], _subdir))
@@ -70,17 +68,11 @@ def _send_pipeline_email(final_state):
     state_label = "SUCCESS" if final_state == "success" else "FAILED"
     subject = f"{subject_prefix} {state_label} {timestamp}"
 
-    report_summary_md = output_config["report_dir"] + "/summary.md"
-    status_json = output_config.get("status_dir", "") + "/status.json" if output_config.get("status_dir") else ""
-
     body = [
         f"ChromBPNet workflow status: {state_label}",
         f"Time: {timestamp}",
         f"Output dir: {config['out_dir']}",
-        f"Report: {report_summary_md}",
     ]
-    if status_json:
-        body.append(f"Status JSON: {status_json}")
     if final_state == "failure":
         body.append("Check Snakemake logs for failed jobs and rerun to recover.")
 
@@ -209,9 +201,6 @@ def list_predictions(wildcards):
 
 
 
-include: "rules/pipeline_report.smk"
-
-
 shell.prefix("source {workflow.basedir}/scripts/env_setup.sh")
 
 rule all:
@@ -219,9 +208,7 @@ rule all:
         # list_average_shap,
         list_modisco,
         list_hitcaller,
-        list_predictions,
-        output_config["report_dir"] + "/summary.md",
-        output_config["status_dir"] + "/status.md"
+        list_predictions
 
 
 onsuccess:
@@ -230,7 +217,6 @@ onsuccess:
 
 onerror:
     _send_pipeline_email("failure")
-
 
 
 
