@@ -26,9 +26,7 @@ DEFAULT_OUT_SUBDIRS = {
 for _key, _subdir in DEFAULT_OUT_SUBDIRS.items():
     output_config.setdefault(_key, os.path.join(config["out_dir"], _subdir))
 
-USE_UNION_PEAKS = config.get("use_union_peak")
-if USE_UNION_PEAKS is None:
-    USE_UNION_PEAKS = config.get("use_union_peaks", False)
+USE_UNION_PEAKS = config.get("use_union_peak", False)
 
 
 def _should_send_email(final_state):
